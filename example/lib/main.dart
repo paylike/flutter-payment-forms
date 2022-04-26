@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:paylike_sdk/paylike_sdk.dart';
-import 'package:paylike_flutter_engine/paylike_flutter_engine.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-const clientId = '';
+/// Replace this with your own client ID
+///
+/// Don't have a client ID? Head to [our platform](https://app.paylike.io) and create one
+const clientId = 'e393f9ec-b2f7-4f81-b455-ce45b02d355d';
 
 class MyApp extends StatelessWidget {
+  final PaylikeCurrencies currencies = PaylikeCurrencies();
   final PaylikeEngine _engine = PaylikeEngine(clientId: clientId);
   MyApp({Key? key}) : super(key: key);
 
@@ -24,7 +27,14 @@ class MyApp extends StatelessWidget {
               child: Center(
                   child: SingleChildScrollView(
                       child: Column(
-            children: [WhiteLabelWidget(engine: _engine)],
+            children: [
+              WhiteLabelWidget(
+                engine: _engine,
+                options: BasePayment(
+                    amount: Money.fromDouble(
+                        currencies.byCode(CurrencyCode.EUR), 11.5)),
+              )
+            ],
             mainAxisAlignment: MainAxisAlignment.center,
           ))))),
     );
