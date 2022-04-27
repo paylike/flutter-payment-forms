@@ -82,9 +82,25 @@ class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
                 Expanded(child: CVCInput(cvcRepository: _cvcRepository)),
               ],
             ),
-            ElevatedButton(
-                onPressed: () => executeCardPayment(),
-                child: const Text('Pay')),
+            Row(children: [
+              Expanded(
+                  child: ElevatedButton(
+                      onPressed: () => executeCardPayment(),
+                      child: const Text('Pay'))),
+            ]),
+            Container(
+              child: const Text('OR'),
+              margin: const EdgeInsets.only(top: 5, bottom: 5),
+            ),
+            Row(children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () => executeCardPayment(),
+                  child: const Icon(Icons.apple, color: Colors.black),
+                  style: ElevatedButton.styleFrom(primary: Colors.white),
+                ),
+              )
+            ])
           ],
         ));
   }
