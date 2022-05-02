@@ -14,9 +14,7 @@ class MinimalWhitelabelExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Minimal white label demo'),
-        ),
+        appBar: AppBar(title: const Text('Minimal white label demo')),
         body: SafeArea(
             child: Center(
                 child: SingleChildScrollView(

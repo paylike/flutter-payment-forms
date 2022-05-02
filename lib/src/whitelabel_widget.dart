@@ -54,9 +54,7 @@ class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
             expiry: _expiryRepository.parse,
           ),
           widget.options));
-    } on NotFoundException catch (e) {
-      /// TODO: Show validation error?
-    }
+    } on NotFoundException catch (e) {}
   }
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -71,7 +69,7 @@ class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
         child: Column(
           children: [
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              PaylikeEngineWidget(engine: widget.engine, showEmptyState: false),
+              PaylikeEngineWidget(engine: widget.engine, showEmptyState: true),
             ]),
             CardInput(fieldRepository: _cardNumberRepository),
             Row(
@@ -83,23 +81,27 @@ class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
               ],
             ),
             Row(children: [
+              const Spacer(),
               Expanded(
                   child: ElevatedButton(
                       onPressed: () => executeCardPayment(),
                       child: const Text('Pay'))),
+              const Spacer(),
             ]),
             Container(
               child: const Text('OR'),
               margin: const EdgeInsets.only(top: 5, bottom: 5),
             ),
             Row(children: [
+              const Spacer(),
               Expanded(
                 child: ElevatedButton(
                   onPressed: () => executeCardPayment(),
                   child: const Icon(Icons.apple, color: Colors.black),
                   style: ElevatedButton.styleFrom(primary: Colors.white),
                 ),
-              )
+              ),
+              const Spacer(),
             ])
           ],
         ));

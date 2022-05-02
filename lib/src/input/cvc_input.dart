@@ -3,8 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:paylike_sdk/src/input/base_input.dart';
 import 'package:paylike_sdk/src/repository/single.dart';
 
-import 'formatters.dart';
-
 /// Used for handling CVC input
 class CVCInput extends StatefulWidget {
   final SingleRepository<String> cvcRepository;
@@ -20,6 +18,7 @@ class _CVCInputState extends State<CVCInput> with EmptyBuildCounter {
   Widget build(BuildContext context) {
     return TextFormField(
         maxLength: 3,
+        style: TextStyle(color: Theme.of(context).colorScheme.error),
         controller: _cvcCtrl,
         keyboardType: TextInputType.number,
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],

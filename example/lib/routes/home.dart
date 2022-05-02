@@ -46,7 +46,9 @@ class HomeItem extends StatelessWidget {
 /// Home screen of the example application
 class HomeScreen extends StatelessWidget {
   final PaylikeEngine engine;
-  const HomeScreen({Key? key, required this.engine}) : super(key: key);
+  final Function() changeTheme;
+  const HomeScreen({Key? key, required this.engine, required this.changeTheme})
+      : super(key: key);
 
   Function() _navigateTo(BuildContext context, String path) {
     return () {
@@ -58,13 +60,16 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Paylike Payment Forms Demo'),
-        ),
+        appBar: AppBar(title: const Text('Paylike Payment Forms Demo')),
         body: SafeArea(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Center(
+                child: ElevatedButton(
+              child: const Text('Switch theme'),
+              onPressed: changeTheme,
+            )),
             HomeItem(
               title: 'Simple whitelabel example',
               description:
