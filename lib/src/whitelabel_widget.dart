@@ -17,8 +17,17 @@ class WhiteLabelWidget extends StatefulWidget {
   /// Contains the options for the payment to execute
   final BasePayment options;
 
+  /// Describes the name of the payment config
+  ///
+  /// You need to have a payment config json in your assets
+  /// which describes to Apple Pay your payment. More information TODO
+  final String paymentConfigName;
+
   const WhiteLabelWidget(
-      {Key? key, required this.engine, required this.options})
+      {Key? key,
+      required this.engine,
+      required this.options,
+      this.paymentConfigName = 'payment_config.json'})
       : super(key: key);
   @override
   State<StatefulWidget> createState() => _WhiteLabelWidgetState();
@@ -55,6 +64,18 @@ class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
           ),
           widget.options));
     } on NotFoundException catch (e) {}
+  }
+
+  void onApplePayResult(Map<String, dynamic> result) async {
+    try {
+      var token = result['token'];
+      var tokenized = await widget.engine.tokenizeAppleToken(token);
+      await widget.engine.createPaymentWithApple(
+          ApplePayPayment.fromBasePayment(tokenized, widget.options));
+    } catch (e) {
+      // TODO: Here we should do some error handling
+      print(e);
+    }
   }
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -95,12 +116,23 @@ class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
             Row(children: [
               const Spacer(),
               Expanded(
-                child: ElevatedButton(
-                  onPressed: () => executeCardPayment(),
-                  child: const Icon(Icons.apple, color: Colors.black),
-                  style: ElevatedButton.styleFrom(primary: Colors.white),
+                  child: ApplePayButton(
+                paymentConfigurationAsset: widget.paymentConfigName,
+                paymentItems: [
+                  PaymentItem(
+                      label: 'Total',
+                      amount: widget.options.amount!.toRepresentationString(
+                          options: const PaymentAmountStringOptions(
+                              currency: false)),
+                      status: PaymentItemStatus.final_price)
+                ],
+                style: ApplePayButtonStyle.black,
+                type: ApplePayButtonType.buy,
+                onPaymentResult: onApplePayResult,
+                loadingIndicator: const Center(
+                  child: CircularProgressIndicator(),
                 ),
-              ),
+              )),
               const Spacer(),
             ])
           ],
