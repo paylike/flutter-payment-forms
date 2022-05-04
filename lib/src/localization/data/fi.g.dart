@@ -2,7 +2,7 @@
 // Generated using https://github.com/paylike/heimdall
 const Map<String, String> fi = {
   "POPUP_HEADER_PAYMENT": "Maksu",
-  "POPUP_HEADER_SUBSEQUENT": "Kirjaudu",
+  "POPUP_HEADER_SUBSEQUENT": "Rekisteröidy",
   "CARD_NUMBER": "Kortin numero",
   "CARD_EXPIRY": "Voimassaoloaika",
   "CARD_CODE": "CVC",
@@ -13,14 +13,26 @@ const Map<String, String> fi = {
   "POWERED_BY": "Turvallisen maksun tuottaa Paylike",
   "TDS_FULL_SCREEN_TEXT": "Ongelmia ikkunan avaamisessa?",
   "TDS_FULL_SCREEN_LINK": "Avaa koko näytölle.",
+  "ERROR_TIMEOUT": "Odottamaton virhe\nKatkeileeko internet-yhteys? Yritä uudelleen hetken kuluttua.",
+  "ERROR_RATE_LIMIT": "Odottamaton virhe\nPalvelumme saa tällä hetkellä liikaa maksupyyntöjä. Odota muutama minuutti ja yritä sitten uudelleen.",
+  "ERROR_UNEXPECTED": "Odottamaton ongelma\nOdota uudelleen hetken kuluttua tai ota yhteyttä tukeen viestillä: {{message}}.",
+  "ERROR_PUBLIC_KEY_IS_NOT_TEST": "Maksuikkuna on testitilassa, mutta annettu yksityisavain on tarkoitettu livetilille. Käytä demotilille tarkoitettua yksityisavainta.",
+  "ERROR_PUBLIC_KEY_IS_TEST": "Maksuikkuna on livetilassa, mutta annettu julkinen avain on tarkoitettu demotilille. Käytä livetilille tarkoitettua julkista avainta.",
+  "ERROR_PUBLIC_KEY_UNKNOWN": "Annetulla julkisella avaimella ei löydy Paylike-tiliä. Päivitä julkinen avain ja yritä uudelleen. ",
+  "ERROR_PUBLIC_KEY_PAYMENTS_NOT_ALLOWED": "Julkisen avaimen ei ole sallittua vastaanottaa maksuja.",
   "ERROR_INVALID_CARD_NUMBER": "Virheellinen kortin numero\nVirheellinen kortin numero. Mikäli ongelma jatkuu, ota yhteys pankkiisi.",
-  "ERROR_CARD_SCHEME_UNKNOWN": "Virheellinen kortin numero, tai korttia ei tueta\nKortin numero on virheellinen, tai valitsemaasi korttityyppiä ei tueta.",
+  "ERROR_CARD_SCHEME_UNKNOWN": "Virheellinen kortin numero, tai korttia ei tueta\nKortin numero on virheellinen, tai valitsemaasi korttityyppiä ei tueta. Tuetut kortit: {{supported}}.",
+  "ERROR_CARD_SCHEME_UNSUPPORTED": "{{scheme}}-kortteja ei tueta.\n{{scheme}}-kortteja ei valitettavasti tueta. Käytä jotain seuraavista vaihtoehdoista: {{supported}}.",
   "ERROR_CARD_SECURITY_CODE_INVALID": "Virheellinen CVC (turvakoodi)\nTarkista CVC (turvakoodi). Se löytyy yleensä kortin takapuolelta. Mikäli ongelma jatkuu, ota yhteys pankkiisi.",
   "ERROR_CARD_EXPIRED": "Kortti on vanhentunut\nKorttisi on vanhentunut. Käytä toista korttia.",
   "ERROR_CARD_DISABLED": "Kortti on rajoitettu\nKortti on rajoitettu, ota yhteyttä pankkiisi lisätietojen saamiseksi.",
   "ERROR_CARD_LOST": "Kortti on hävinnyt tai varastettu\nKortti on peruutettu ja listattu varastetuksi tai kadonneeksi, ota yhteyttä pankkiisi lisätietojen saamiseksi.",
   "ERROR_AMOUNT_LIMIT": "Kortin raja saavutettu\nKortin maksuraja on täynnä. Ota yhteys pankkiisi muuttaaksesi rajaa.",
   "ERROR_INSUFFICIENT_FUNDS": "Kortilla ei ole katetta\nKortilla ei ole riittävästi varoja maksutapahtuman suorittamiseen. Käytä toista korttia, tai siirrä tilille rahaa. Mikäli ongelma jatkuu, ota yhteyttä pankkiisi.",
-  "ERROR_REJECTED_BY_ISSUER": "Kortti hylättiin\nMaksutapahtuma hylättiin pankkisi toimesta. Ota yhteyttä pankkiisi."
+  "ERROR_RECEIVER_BLOCKED": "Kauppias estetty\nPankkisi hylkäsi maksupyynnön, koska kauppias on heidän järjestelmässään estetty. Ota yhteys pankkiisi.",
+  "ERROR_REJECTED_BY_ISSUER": "Kortti hylättiin\nMaksutapahtuma hylättiin pankkisi toimesta. Ota yhteyttä pankkiisi.",
+  "ERROR_REJECTED": "Maksu hylättiin\nYritä uudelleen hetken kuluttua tai ota yhteys tukeen ongelman jatkuessa.",
+  "ERROR_TDSECURE_REQUIRED": "3-D Secure vaaditaan\n3-D Secure (Visa Secure/Mastercard Identity Check) vaaditaan maksun hyväksymiseksi, mutta tätä ei onnistuttu saamaan. Yritä uudelleen hetken kuluttua tai ota yhteys pankkiisi.",
+  "ERROR_TDSECURE_FAILED": "3-D Secure epäonnistui\n3-D Secure (Visa Secure/Mastercard Identity Check) vaaditaan, mutta varmennusta ei onnistuttu saamaan. Yritä uudelleen hetken kuluttua tai ota yhteys pankkiisi."
 };
 

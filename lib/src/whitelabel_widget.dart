@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:paylike_flutter_engine/engine_widget.dart';
 import 'package:paylike_flutter_engine/paylike_flutter_engine.dart';
+import 'package:paylike_sdk/src/domain/error.dart';
 import 'package:paylike_sdk/src/exceptions.dart';
 import 'package:paylike_sdk/src/input/card_number_input.dart';
 import 'package:paylike_sdk/src/input/cvc_input.dart';
@@ -55,9 +56,24 @@ class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
     widget.engine.removeListener(_engineListener);
   }
 
+  Future<void> _errorHandler(Function() fn) async {
+    try {
+      await fn();
+    } on PaylikeException catch (e) {
+      _errorMessageRepository.set(PaylikeFormsError(apiException: e));
+      setState(() {});
+    } on PaylikeEngineError catch (e) {
+      _errorMessageRepository.set(PaylikeFormsError(engineError: e));
+      setState(() {});
+    } on Exception catch (e) {
+      _errorMessageRepository.set(PaylikeFormsError(exception: e));
+      setState(() {});
+    }
+  }
+
   /// Executes a card payment based on the input information
   void executeCardPayment() async {
-    try {
+    await _errorHandler(() async {
       var number = _cardNumberRepository.item.replaceAll(" ", "");
       var cvc = _cvcRepository.item;
       var tokenized = await widget.engine.tokenize(number, cvc);
@@ -67,26 +83,24 @@ class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
             expiry: _expiryRepository.parse,
           ),
           widget.options));
-    } on NotFoundException catch (e) {}
+    });
   }
 
   void onApplePayResult(Map<String, dynamic> result) async {
-    try {
+    await _errorHandler(() async {
       var token = result['token'];
       var tokenized = await widget.engine.tokenizeAppleToken(token);
       await widget.engine.createPaymentWithApple(
           ApplePayPayment.fromBasePayment(tokenized, widget.options));
-    } catch (e) {
-      // TODO: Here we should do some error handling
-      print(e);
-    }
+    });
   }
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final SingleRepository<String> _cardNumberRepository = SingleRepository();
   final ExpiryRepository _expiryRepository = ExpiryRepository();
   final SingleRepository<String> _cvcRepository = SingleRepository();
-  final SingleRepository<String> _errorMessageRepository = SingleRepository();
+  final SingleRepository<PaylikeFormsError> _errorMessageRepository =
+      SingleRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -106,8 +120,11 @@ class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
                 Expanded(child: CVCInput(cvcRepository: _cvcRepository)),
               ],
             ),
-            const WhitelabelErrorWidget(
-                isVisible: true, message: 'Some error happened'),
+            WhitelabelErrorWidget(
+                isVisible: _errorMessageRepository.isAvailable,
+                message: _errorMessageRepository.isAvailable
+                    ? _errorMessageRepository.item.displayMessage
+                    : ''),
             Row(children: [
               const Spacer(),
               Expanded(

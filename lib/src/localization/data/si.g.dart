@@ -2,7 +2,7 @@
 // Generated using https://github.com/paylike/heimdall
 const Map<String, String> si = {
   "POPUP_HEADER_PAYMENT": "Plačilo",
-  "POPUP_HEADER_SUBSEQUENT": "Shrani kartico",
+  "POPUP_HEADER_SUBSEQUENT": "Prijavite se",
   "CARD_NUMBER": "Številka kartice",
   "CARD_EXPIRY": "Velja do mesec/leto",
   "CARD_CODE": "CVC",
@@ -12,15 +12,27 @@ const Map<String, String> si = {
   "SAVING": "Shranjujem....…",
   "POWERED_BY": "Varno plačilo zagotavlja Paylike",
   "TDS_FULL_SCREEN_TEXT": "Ne vidite okna?",
-  "TDS_FULL_SCREEN_LINK": "Odprite v polnozaslonskem načinu.",
+  "TDS_FULL_SCREEN_LINK": "Razširi v celozaslonskem načinu",
+  "ERROR_TIMEOUT": "Nepričakovana težava\nAli imate težavo z internetno povezavo? Prosimo poiskusite ponovno nekoliko kasneje.",
+  "ERROR_RATE_LIMIT": "Nepričakovana težava\nTrenutno imamo preveč plačilnih zahtevkov. Prosimo počakajte nekaj minut, predno poskusite ponovno.",
+  "ERROR_UNEXPECTED": "Nepričakovana težava\nPoskusite nekoliko kasneje ali kontaktirajte našo tehnično podporo s sporočilom: {{message}}",
+  "ERROR_PUBLIC_KEY_IS_NOT_TEST": "Pojavno okno za plačilo je v preskusnem načinu, vendar je public key za aktiven račun. Za preskusni račun uporabite public key za testni račun.",
+  "ERROR_PUBLIC_KEY_IS_TEST": "Pojavno okno za plačilo je v načinu v živo, vendar je public key za preskusni račun. Za aktivni račun, uporabite public key za aktivni račun.",
+  "ERROR_PUBLIC_KEY_UNKNOWN": "Navedeno prosto geslo ni povezano z računom Paylike. Posodobite public key in poskusite znova.",
+  "ERROR_PUBLIC_KEY_PAYMENTS_NOT_ALLOWED": "S public key ni dovoljeno sprejemanje plačil.",
   "ERROR_INVALID_CARD_NUMBER": "Napačna številka kartice\nPreverite številko kartice. Če se težava ponavlja, prosimo kontaktirajte vašo banko.",
-  "ERROR_CARD_SCHEME_UNKNOWN": "Napačna številka kartice ali pa kartica ni podprta\nŠtevilka kartice je napačna ali pa ta vrsta kartic ni podprta.",
-  "ERROR_CARD_SECURITY_CODE_INVALID": "Napačna CVC (varnostna koda)\nPreverite CVC (varnostno kodo), ponavadi jo najdete na zadnji strani kartice. Če se težava ponavlja, prosimo kontaktirajte vašo banko.",
+  "ERROR_CARD_SCHEME_UNKNOWN": "Napačna številka kartice ali pa kartica ni podprta \nŠtevilka kartice je napačna ali pa ta vrsta kartic ni podprta. Podprte kartice: {{supported}}.",
+  "ERROR_CARD_SCHEME_UNSUPPORTED": "{{scheme}} Te kartice niso podprte\n{{scheme}} Te Kartice na žalost niso podprte. Prosimo uporabite eno izmed teh: {{supported}}.",
+  "ERROR_CARD_SECURITY_CODE_INVALID": "Napačna CVC (varnostna koda)\nProsimo preverite CVC (varnostno kodo), ponavadi jo najdete na \nzadnji strani kartice. Če se težava ponavlja, prosimo kontaktirajte vašo banko.",
   "ERROR_CARD_EXPIRED": "Kartica je potekla\nVaša kartica je potekla. Prosimo poizkusite z drugo kartico.",
-  "ERROR_CARD_DISABLED": "Kartica je omejena\nKartica je omejena, prosimo kontaktirajte vašo banko za več informacij.",
-  "ERROR_CARD_LOST": "Kartica je izgubljena ali ukradena\nKartica je bila blokirana in označena kot izgubljena ali ukradena, prosimo kontaktirajte vašo banko za več informacij.",
+  "ERROR_CARD_DISABLED": "Kartica je blokirana\nKartica je blokirana, prosimo kontaktirajte vašo banko za več informacij.",
+  "ERROR_CARD_LOST": "Kartica je blokirana\nKartica je bila blokirana in označena kot izgubljena ali ukradena, prosimo kontaktirajte vašo banko za več informacij.",
   "ERROR_AMOUNT_LIMIT": "Prekoračen limit kartice\nDosežen je bil limit na vaši kartici. Prosimo kontaktirajte vašo banko da ponastavi ali pa poveča limit.",
   "ERROR_INSUFFICIENT_FUNDS": "Ni dovolj sredstev\nNa kartici ni dovolj sredstev za plačilo naročila. Prosimo poizkusite z drugo kartico ali pa dodajte sredstva na vaš račun. Če se težava ponavlja, prosimo kontaktirajte vašo banko.",
-  "ERROR_REJECTED_BY_ISSUER": "Kartica je bila zavrnjena\nKartica je bila zavrnjena s strani vaše banke. Prosimo kontaktirajte vašo banko."
+  "ERROR_RECEIVER_BLOCKED": "Blokiran trgovec \nPlačilo je bilo zavrjeno s strani vaše banke, zaradi blokade trgovca. Prosimo kontaktirajte svojo banko.",
+  "ERROR_REJECTED_BY_ISSUER": "Kartica je bila zavrnjena\nKartica je bila zavrnjena s strani vaše banke. Prosimo kontaktirajte vašo banko.",
+  "ERROR_REJECTED": "Plačilo je bilo zavrnjeno\nProsimo poskusite ponovno čez nekaj trenutkov ali kontaktirajte našo službo za podporo uporabnikov, v primeru ponavljanja težave.",
+  "ERROR_TDSECURE_REQUIRED": "Zahtevana 3-D Secure\nZa sprejem tega plačila je bila potrebna 3-D Secure (Visa Secure / Mastercard Identity Check), vendar je ni bilo mogoče pridobiti. Poskusite znova čez nekaj časa ali se obrnite na svojo banko.",
+  "ERROR_TDSECURE_FAILED": "3-D Secure ni uspel \n3-D Secure (Visa Secure / Mastercard Identity Check) je obvezna, vendar ni bilo možno pridobiti preverjanje pristnosti. Poskusite znova ali se obrnite na svojo banko."
 };
 

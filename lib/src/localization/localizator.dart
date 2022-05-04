@@ -23,7 +23,10 @@ import 'languages.dart';
 
 /// Holds information about an already localized error
 class LocalizedPaylikeError {
+  /// Name of the error
   final String name;
+
+  /// List with the desired input field names
   final List<FailedField> places;
   const LocalizedPaylikeError({required this.name, this.places = const []});
 }
@@ -167,7 +170,7 @@ class PaylikeLocalizator {
   static TransactionUserError localizeError(PaylikeException e) {
     try {
       if (!PaylikeLocalizator.exceptionMapper.containsKey(e.code)) {
-        throw Exception();
+        throw Exception('${e.code} could not be found in localization');
       }
       var found =
           PaylikeLocalizator.exceptionMapper[e.code] as LocalizedPaylikeError;

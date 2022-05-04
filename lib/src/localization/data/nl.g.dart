@@ -13,14 +13,26 @@ const Map<String, String> nl = {
   "POWERED_BY": "Veilige betaling door Paylike",
   "TDS_FULL_SCREEN_TEXT": "Probleem om het scherm te zien?",
   "TDS_FULL_SCREEN_LINK": "Open volledig scherm.",
+  "ERROR_TIMEOUT": "Onverwacht probleem\nKan er een probleem zijn met uw internetverbinding? Probeer later opnieuw.",
+  "ERROR_RATE_LIMIT": "Onverwacht probleem\nMomenteel ontvangen wij te veel betalingsverzoeken. Wacht een paar minuten voordat je het nog een keer probeert.",
+  "ERROR_UNEXPECTED": "Onverwacht probleem\nProbeer later opnieuw of neem contact op met onze klantenservice met het bericht: {{message}}.",
+  "ERROR_PUBLIC_KEY_IS_NOT_TEST": "De betaling popup zit in de testmodus, maar de verstrekte public key is bedoelt voor een live account. Gebruik een public key voor een test account.",
+  "ERROR_PUBLIC_KEY_IS_TEST": "De betaling popup zit in de live modus, maar de verstrekte public key is bedoelt voor een test account. Gebruik een public key voor een live account.",
+  "ERROR_PUBLIC_KEY_UNKNOWN": "De verstrekte public key is niet gekoppeld aan een Paylike account. Update de public key en probeer opnieuw.",
+  "ERROR_PUBLIC_KEY_PAYMENTS_NOT_ALLOWED": "De public key heeft geen toestemming om betalingen te accepteren.",
   "ERROR_INVALID_CARD_NUMBER": "Ongeldig kaartnummer\nControleer uw kaartnummer. Als dit probleem blijft terugkomen, neem contact op met uw bank.",
   "ERROR_CARD_SCHEME_UNKNOWN": "Ongeldig kaartnummer of ongeldige kaart\nHet kaartnummer is niet correct of deze kaart deze kaart wordt niet ondersteunt.",
+  "ERROR_CARD_SCHEME_UNSUPPORTED": "{{scheme}} kaarten worden niet ondersteund\n{{scheme}} kaarten worden helaas niet ondersteund. Gebruik een van: {{supported}}.",
   "ERROR_CARD_SECURITY_CODE_INVALID": "Ongeldige CVC (beveiligings code)\nControleer CVC (beveiligings code), deze code vind u op de achterkant van uw kaart. Als dit probleem blijft terugkomen, neem contact op met uw bank.",
   "ERROR_CARD_EXPIRED": "Uw kaart is verlopen\nUw kaart is verlopen. Gebruik andere kaart.",
   "ERROR_CARD_DISABLED": "De kaart is beperkt\nDeze kaart is beperkt, neem contact op met uw bank voor meer informatie.",
-  "ERROR_CARD_LOST": "Kaart is verloren of gestolen\nDeze kaart is geblokkeerd  and staat te boek als verloren of gestolen, neem contact op met uw bank voor meer informatie.",
+  "ERROR_CARD_LOST": "Kaart geblokkeerd\nDeze kaart staat vermeld als verloren of gestolen, neem contact op met uw bank voor meer informatie.",
   "ERROR_AMOUNT_LIMIT": "Kaart limiet overschreden\nKaart limiet is overschreden. Neem contact op met uw bank om limiet aan te passen.",
   "ERROR_INSUFFICIENT_FUNDS": "Onvoldoende saldo op uw kaart\nEr is onvoldoende saldo op uw kaart om aan het bedrag te kunnnen voldoen. Gebruik andere kaart of stort geld op kaart account. Als dit probleem blijft terugkomen, neem contact op met uw bank.",
-  "ERROR_REJECTED_BY_ISSUER": "De kaart is geweigert\nDe kaart is geweigert door uw bank. Neem contact op met uw bank AUB."
+  "ERROR_RECEIVER_BLOCKED": "Verkoper geblokkeerd\nDe betaling is geweigerd door uw bank omdat de verkoper is geblokkeerd. Neem contact op met uw bank.",
+  "ERROR_REJECTED_BY_ISSUER": "De kaart is geweigerd\nDe kaart is geweigerd door uw bank. Neem contact op met uw bank.",
+  "ERROR_REJECTED": "De betaling is geweigerd\nProbeer later opnieuw of neem contact op met de klantenservice als het probleem zich blijft voordoen.",
+  "ERROR_TDSECURE_REQUIRED": "3-D Secure vereist\n3-D Secure (Visa Secure/Mastercard Identity Check) is vereist om deze betaling te accepteren, maar het is niet mogelijk om deze te verkrijgen. Probeer wat later opnieuw of neem contact op met uw bank.",
+  "ERROR_TDSECURE_FAILED": "3-D Secure mislukt\n3-D Secure (Visa Secure/Mastercard Identity Check) is vereist maar het is mislukt om de authenticatie te verkrijgen. Probeer later opnieuw of neem contact op met uw bank."
 };
 
