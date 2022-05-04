@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:paylike_flutter_engine/engine_widget.dart';
 import 'package:paylike_flutter_engine/paylike_flutter_engine.dart';
@@ -7,6 +9,8 @@ import 'package:paylike_sdk/src/input/cvc_input.dart';
 import 'package:paylike_sdk/src/input/expiry_input.dart';
 import 'package:paylike_sdk/src/repository/expiry.dart';
 import 'package:paylike_sdk/src/repository/single.dart';
+
+import 'error_widget.dart';
 
 /// The most simple widget of the package built for providing
 /// a simple card, expiry and cvc code field, optionally a pay button as well
@@ -82,6 +86,7 @@ class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
   final SingleRepository<String> _cardNumberRepository = SingleRepository();
   final ExpiryRepository _expiryRepository = ExpiryRepository();
   final SingleRepository<String> _cvcRepository = SingleRepository();
+  final SingleRepository<String> _errorMessageRepository = SingleRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -101,6 +106,8 @@ class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
                 Expanded(child: CVCInput(cvcRepository: _cvcRepository)),
               ],
             ),
+            const WhitelabelErrorWidget(
+                isVisible: true, message: 'Some error happened'),
             Row(children: [
               const Spacer(),
               Expanded(
@@ -109,32 +116,36 @@ class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
                       child: const Text('Pay'))),
               const Spacer(),
             ]),
-            Container(
-              child: const Text('OR'),
-              margin: const EdgeInsets.only(top: 5, bottom: 5),
-            ),
-            Row(children: [
-              const Spacer(),
-              Expanded(
-                  child: ApplePayButton(
-                paymentConfigurationAsset: widget.paymentConfigName,
-                paymentItems: [
-                  PaymentItem(
-                      label: 'Total',
-                      amount: widget.options.amount!.toRepresentationString(
-                          options: const PaymentAmountStringOptions(
-                              currency: false)),
-                      status: PaymentItemStatus.final_price)
-                ],
-                style: ApplePayButtonStyle.black,
-                type: ApplePayButtonType.buy,
-                onPaymentResult: onApplePayResult,
-                loadingIndicator: const Center(
-                  child: CircularProgressIndicator(),
-                ),
-              )),
-              const Spacer(),
-            ])
+            Visibility(
+                visible: Platform.isIOS,
+                child: Container(
+                  child: const Text('OR'),
+                  margin: const EdgeInsets.only(top: 5, bottom: 5),
+                )),
+            Visibility(
+                visible: Platform.isIOS,
+                child: Row(children: [
+                  const Spacer(),
+                  Expanded(
+                      child: ApplePayButton(
+                    paymentConfigurationAsset: widget.paymentConfigName,
+                    paymentItems: [
+                      PaymentItem(
+                          label: 'Total',
+                          amount: widget.options.amount!.toRepresentationString(
+                              options: const PaymentAmountStringOptions(
+                                  currency: false)),
+                          status: PaymentItemStatus.final_price)
+                    ],
+                    style: ApplePayButtonStyle.black,
+                    type: ApplePayButtonType.buy,
+                    onPaymentResult: onApplePayResult,
+                    loadingIndicator: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )),
+                  const Spacer(),
+                ])),
           ],
         ));
   }
