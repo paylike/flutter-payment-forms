@@ -79,6 +79,16 @@ class HomeScreen extends StatelessWidget {
                 AvailabilityPlatforms.android
               ],
               onPressed: _navigateTo(context, '/example/minimal'),
+            ),
+            HomeItem(
+              title: 'Complex whitelabel example',
+              description:
+                  'Example to showcase the capabilities of our form builder',
+              platforms: const [
+                AvailabilityPlatforms.ios,
+                AvailabilityPlatforms.android
+              ],
+              onPressed: _navigateTo(context, '/example/complex'),
             )
           ],
         )));

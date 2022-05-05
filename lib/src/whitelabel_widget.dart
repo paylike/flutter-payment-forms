@@ -45,10 +45,10 @@ class WhiteLabelWidget extends StatefulWidget {
       this.testConfig})
       : super(key: key);
   @override
-  State<StatefulWidget> createState() => _WhiteLabelWidgetState();
+  State<StatefulWidget> createState() => WhiteLabelWidgetState();
 }
 
-class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
+class WhiteLabelWidgetState extends State<WhiteLabelWidget> {
   /// Listens to engine events and updates the widget if anything happens
   void _engineListener() {
     setState(() {
@@ -158,14 +158,14 @@ class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
       SingleRepository(validator: (e) => true);
 
   /// Webview widget provided by [PaylikeEngineWidget]
-  Widget webview() {
+  Widget _webview() {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       PaylikeEngineWidget(engine: widget.engine, showEmptyState: true),
     ]);
   }
 
   /// Card number, expiry and CVC inputs
-  List<Widget> inputFields() {
+  List<Widget> _inputFields() {
     return [
       CardInput(repository: _cardNumberRepository, service: _cardService),
       Row(
@@ -183,7 +183,7 @@ class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
   }
 
   /// Error message display
-  Widget formError() {
+  Widget _formError() {
     return WhitelabelErrorWidget(
         isVisible: _errorMessageRepository.isAvailable,
         message: _errorMessageRepository.isAvailable
@@ -192,7 +192,7 @@ class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
   }
 
   /// Card pay and apple pay button
-  List<Widget> payButtons() {
+  List<Widget> _payButtons() {
     return [
       Row(children: [
         const Spacer(),
@@ -235,10 +235,10 @@ class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
         key: _formKey,
         child: Column(
           children: [
-            webview(),
-            ...inputFields(),
-            formError(),
-            ...payButtons(),
+            _webview(),
+            ..._inputFields(),
+            _formError(),
+            ..._payButtons(),
           ],
         ));
   }

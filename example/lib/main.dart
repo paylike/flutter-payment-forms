@@ -1,3 +1,4 @@
+import 'package:example/routes/complex_example.dart';
 import 'package:example/routes/home.dart';
 import 'package:example/routes/minimal_example.dart';
 import 'package:flutter/cupertino.dart';
@@ -68,6 +69,14 @@ class _MyAppState extends State<MyApp> {
             position: NotificationPosition.bottom);
       }
     });
+    var routes = {
+      '/': (context) =>
+          HomeScreen(engine: widget._engine, changeTheme: _changeTheme),
+      '/example/minimal': (context) => MinimalWhitelabelExample(
+          engine: widget._engine, currencies: widget._currencies),
+      '/example/complex': (context) => ComplexWhiteLabelExample(
+          engine: widget._engine, currencies: widget._currencies)
+    };
     if (appType == ExampleAppType.cupertino) {
       return OverlaySupport.global(
           child: CupertinoApp(
@@ -78,12 +87,7 @@ class _MyAppState extends State<MyApp> {
                 DefaultCupertinoLocalizations.delegate,
               ],
               initialRoute: '/',
-              routes: {
-                '/': (context) => HomeScreen(
-                    engine: widget._engine, changeTheme: _changeTheme),
-                '/example/minimal': (context) => MinimalWhitelabelExample(
-                    engine: widget._engine, currencies: widget._currencies)
-              }));
+              routes: routes));
     }
     return OverlaySupport.global(
         child: MaterialApp(
@@ -92,11 +96,6 @@ class _MyAppState extends State<MyApp> {
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
             ),
-            routes: {
-          '/': (context) =>
-              HomeScreen(engine: widget._engine, changeTheme: _changeTheme),
-          '/example/minimal': (context) => MinimalWhitelabelExample(
-              engine: widget._engine, currencies: widget._currencies)
-        }));
+            routes: routes));
   }
 }
