@@ -3,9 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:paylike_flutter_engine/engine_widget.dart';
 import 'package:paylike_flutter_engine/paylike_flutter_engine.dart';
-import 'package:paylike_luhn/paylike_luhn.dart';
 import 'package:paylike_sdk/src/domain/error.dart';
-import 'package:paylike_sdk/src/exceptions.dart';
 import 'package:paylike_sdk/src/input/base_input.dart';
 import 'package:paylike_sdk/src/input/card_number_input.dart';
 import 'package:paylike_sdk/src/input/cvc_input.dart';
@@ -107,7 +105,7 @@ class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
   }
 
   /// Executes a card payment based on the input information
-  void executeCardPayment() async {
+  void _executeCardPayment() async {
     await _errorHandler(() async {
       var number = _cardNumberRepository.item.replaceAll(" ", "");
       var cvc = _cvcRepository.item;
@@ -124,7 +122,7 @@ class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
   }
 
   /// Executes an Apple Pay payment
-  void onApplePayResult(Map<String, dynamic> result) async {
+  void _executeApplePayPayment(Map<String, dynamic> result) async {
     await _errorHandler(() async {
       var token = result['token'];
       var tokenized = await widget.engine.tokenizeAppleToken(token);
@@ -159,65 +157,88 @@ class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
   final SingleRepository<PaylikeFormsError> _errorMessageRepository =
       SingleRepository(validator: (e) => true);
 
+  /// Webview widget provided by [PaylikeEngineWidget]
+  Widget webview() {
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      PaylikeEngineWidget(engine: widget.engine, showEmptyState: true),
+    ]);
+  }
+
+  /// Card number, expiry and CVC inputs
+  List<Widget> inputFields() {
+    return [
+      CardInput(repository: _cardNumberRepository, service: _cardService),
+      Row(
+        children: [
+          Expanded(
+              child: ExpiryInput(
+                  repository: _expiryRepository, service: _expiryService)),
+          const Spacer(),
+          Expanded(
+              child:
+                  CVCInput(repository: _cvcRepository, service: _cvcService)),
+        ],
+      )
+    ];
+  }
+
+  /// Error message display
+  Widget formError() {
+    return WhitelabelErrorWidget(
+        isVisible: _errorMessageRepository.isAvailable,
+        message: _errorMessageRepository.isAvailable
+            ? _errorMessageRepository.item.displayMessage
+            : '');
+  }
+
+  /// Card pay and apple pay button
+  List<Widget> payButtons() {
+    return [
+      Row(children: [
+        const Spacer(),
+        Expanded(
+            child: ElevatedButton(
+                onPressed: () => _executeCardPayment(),
+                child: Text(PaylikeLocalizator.getKey('PAY')))),
+        const Spacer(),
+      ]),
+      Visibility(
+          visible: Platform.isIOS,
+          child: Row(children: [
+            const Spacer(),
+            Expanded(
+                child: ApplePayButton(
+              paymentConfigurationAsset: widget.paymentConfigName,
+              paymentItems: [
+                PaymentItem(
+                    label: 'Total',
+                    amount: widget.options.amount!.toRepresentationString(
+                        options:
+                            const PaymentAmountStringOptions(currency: false)),
+                    status: PaymentItemStatus.final_price)
+              ],
+              style: ApplePayButtonStyle.black,
+              type: ApplePayButtonType.buy,
+              onPaymentResult: _executeApplePayPayment,
+              loadingIndicator: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            )),
+            const Spacer(),
+          ]))
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
         key: _formKey,
         child: Column(
           children: [
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              PaylikeEngineWidget(engine: widget.engine, showEmptyState: true),
-            ]),
-            CardInput(repository: _cardNumberRepository, service: _cardService),
-            Row(
-              children: [
-                Expanded(
-                    child: ExpiryInput(
-                        repository: _expiryRepository,
-                        service: _expiryService)),
-                const Spacer(),
-                Expanded(
-                    child: CVCInput(
-                        repository: _cvcRepository, service: _cvcService)),
-              ],
-            ),
-            WhitelabelErrorWidget(
-                isVisible: _errorMessageRepository.isAvailable,
-                message: _errorMessageRepository.isAvailable
-                    ? _errorMessageRepository.item.displayMessage
-                    : ''),
-            Row(children: [
-              const Spacer(),
-              Expanded(
-                  child: ElevatedButton(
-                      onPressed: () => executeCardPayment(),
-                      child: Text(PaylikeLocalizator.getKey('PAY')))),
-              const Spacer(),
-            ]),
-            Visibility(
-                visible: Platform.isIOS,
-                child: Row(children: [
-                  const Spacer(),
-                  Expanded(
-                      child: ApplePayButton(
-                    paymentConfigurationAsset: widget.paymentConfigName,
-                    paymentItems: [
-                      PaymentItem(
-                          label: 'Total',
-                          amount: widget.options.amount!.toRepresentationString(
-                              options: const PaymentAmountStringOptions(
-                                  currency: false)),
-                          status: PaymentItemStatus.final_price)
-                    ],
-                    style: ApplePayButtonStyle.black,
-                    type: ApplePayButtonType.buy,
-                    onPaymentResult: onApplePayResult,
-                    loadingIndicator: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  )),
-                  const Spacer(),
-                ])),
+            webview(),
+            ...inputFields(),
+            formError(),
+            ...payButtons(),
           ],
         ));
   }
