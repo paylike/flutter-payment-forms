@@ -26,7 +26,10 @@ enum ExampleAppType {
 class MyApp extends StatefulWidget {
   final PaylikeCurrencies _currencies = PaylikeCurrencies();
   final PaylikeEngine _engine = PaylikeEngine(clientId: clientId);
-  MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key) {
+    /// Change this to use a different language
+    PaylikeLocalizator.current = Languages.en;
+  }
 
   @override
   State<StatefulWidget> createState() => _MyAppState();

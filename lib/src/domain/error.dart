@@ -1,5 +1,4 @@
 import 'package:paylike_sdk/paylike_sdk.dart';
-import 'package:paylike_sdk/src/localization/localizator.dart';
 
 /// Describes an error used to store and display information about
 /// an exception in the system
@@ -37,7 +36,7 @@ class PaylikeFormsError {
         return engineError!.message;
       }
       if (exception != null) {
-        return exception.toString();
+        return exception.toString().replaceFirst('Exception: ', '');
       }
     } on Exception catch (e) {
       exception = e;

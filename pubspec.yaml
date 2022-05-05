@@ -14,6 +14,7 @@ dependencies:
   pay: ^1.0.8
   paylike_flutter_engine:
     path: '../flutter-engine'
+  paylike_luhn: ^2.0.0
 
 dev_dependencies:
   flutter_test:

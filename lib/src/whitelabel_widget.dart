@@ -3,13 +3,20 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:paylike_flutter_engine/engine_widget.dart';
 import 'package:paylike_flutter_engine/paylike_flutter_engine.dart';
+import 'package:paylike_luhn/paylike_luhn.dart';
 import 'package:paylike_sdk/src/domain/error.dart';
 import 'package:paylike_sdk/src/exceptions.dart';
+import 'package:paylike_sdk/src/input/base_input.dart';
 import 'package:paylike_sdk/src/input/card_number_input.dart';
 import 'package:paylike_sdk/src/input/cvc_input.dart';
+import 'package:paylike_sdk/src/input/display_service.dart';
 import 'package:paylike_sdk/src/input/expiry_input.dart';
+import 'package:paylike_sdk/src/localization/localizator.dart';
 import 'package:paylike_sdk/src/repository/expiry.dart';
 import 'package:paylike_sdk/src/repository/single.dart';
+import 'package:paylike_sdk/src/validators/card_number.dart';
+import 'package:paylike_sdk/src/validators/cvc.dart';
+import 'package:paylike_sdk/src/validators/expiry.dart';
 
 import 'error_widget.dart';
 
@@ -22,6 +29,10 @@ class WhiteLabelWidget extends StatefulWidget {
   /// Contains the options for the payment to execute
   final BasePayment options;
 
+  /// Can be used to simulate scenarios in our sandbox environment,
+  /// [more info here.](https://github.com/paylike/api-reference/blob/main/payments/index.md#test)
+  final Map<String, dynamic>? testConfig;
+
   /// Describes the name of the payment config
   ///
   /// You need to have a payment config json in your assets
@@ -32,7 +43,8 @@ class WhiteLabelWidget extends StatefulWidget {
       {Key? key,
       required this.engine,
       required this.options,
-      this.paymentConfigName = 'payment_config.json'})
+      this.paymentConfigName = 'payment_config.json',
+      this.testConfig})
       : super(key: key);
   @override
   State<StatefulWidget> createState() => _WhiteLabelWidgetState();
@@ -41,7 +53,14 @@ class WhiteLabelWidget extends StatefulWidget {
 class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
   /// Listens to engine events and updates the widget if anything happens
   void _engineListener() {
-    setState(() => {});
+    setState(() {
+      if (widget.engine.current == EngineState.errorHappened) {
+        _errorMessageRepository.set(PaylikeFormsError(
+            engineError: widget.engine.error as PaylikeEngineError));
+        return;
+      }
+      _errorMessageRepository.reset();
+    });
   }
 
   @override
@@ -58,6 +77,9 @@ class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
 
   Future<void> _errorHandler(Function() fn) async {
     try {
+      if (!inputsValid()) {
+        throw Exception('Invalid card information. Please try again.');
+      }
       await fn();
     } on PaylikeException catch (e) {
       _errorMessageRepository.set(PaylikeFormsError(apiException: e));
@@ -71,36 +93,71 @@ class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
     }
   }
 
+  /// Validates input fields
+  bool inputsValid() {
+    _cvcService.change(
+        _cvcRepository.isValid() ? InputStates.valid : InputStates.invalid);
+    _expiryService.change(
+        _expiryRepository.isValid() ? InputStates.valid : InputStates.invalid);
+    _cardService.change(_cardNumberRepository.isValid()
+        ? InputStates.valid
+        : InputStates.invalid);
+    return ([_cvcService, _expiryService, _cardService]
+        .every((e) => e.current == InputStates.valid));
+  }
+
   /// Executes a card payment based on the input information
   void executeCardPayment() async {
     await _errorHandler(() async {
       var number = _cardNumberRepository.item.replaceAll(" ", "");
       var cvc = _cvcRepository.item;
       var tokenized = await widget.engine.tokenize(number, cvc);
-      await widget.engine.createPayment(CardPayment.fromBasePayment(
-          PaylikeCard(
-            details: tokenized,
-            expiry: _expiryRepository.parse,
-          ),
-          widget.options));
+      await widget.engine.createPayment(
+          CardPayment.fromBasePayment(
+              PaylikeCard(
+                details: tokenized,
+                expiry: _expiryRepository.parse,
+              ),
+              widget.options),
+          testConfig: widget.testConfig);
     });
   }
 
+  /// Executes an Apple Pay payment
   void onApplePayResult(Map<String, dynamic> result) async {
     await _errorHandler(() async {
       var token = result['token'];
       var tokenized = await widget.engine.tokenizeAppleToken(token);
       await widget.engine.createPaymentWithApple(
-          ApplePayPayment.fromBasePayment(tokenized, widget.options));
+          ApplePayPayment.fromBasePayment(tokenized, widget.options),
+          testConfig: widget.testConfig);
     });
   }
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final SingleRepository<String> _cardNumberRepository = SingleRepository();
-  final ExpiryRepository _expiryRepository = ExpiryRepository();
-  final SingleRepository<String> _cvcRepository = SingleRepository();
+
+  /// Card number
+
+  final SingleRepository<String> _cardNumberRepository =
+      SingleRepository(validator: CardNumberValidator.isValid);
+  final InputDisplayService _cardService = InputDisplayService();
+
+  /// Expiry
+
+  final ExpiryRepository _expiryRepository =
+      ExpiryRepository(validator: ExpiryValidator.isValid);
+  final InputDisplayService _expiryService = InputDisplayService();
+
+  /// CVC
+
+  final SingleRepository<String> _cvcRepository =
+      SingleRepository(validator: CVCValidator.isValid);
+  final InputDisplayService _cvcService = InputDisplayService();
+
+  /// Errors
+
   final SingleRepository<PaylikeFormsError> _errorMessageRepository =
-      SingleRepository();
+      SingleRepository(validator: (e) => true);
 
   @override
   Widget build(BuildContext context) {
@@ -111,13 +168,17 @@ class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               PaylikeEngineWidget(engine: widget.engine, showEmptyState: true),
             ]),
-            CardInput(fieldRepository: _cardNumberRepository),
+            CardInput(repository: _cardNumberRepository, service: _cardService),
             Row(
               children: [
                 Expanded(
-                    child: ExpiryInput(expiryRepository: _expiryRepository)),
+                    child: ExpiryInput(
+                        repository: _expiryRepository,
+                        service: _expiryService)),
                 const Spacer(),
-                Expanded(child: CVCInput(cvcRepository: _cvcRepository)),
+                Expanded(
+                    child: CVCInput(
+                        repository: _cvcRepository, service: _cvcService)),
               ],
             ),
             WhitelabelErrorWidget(
@@ -130,15 +191,9 @@ class _WhiteLabelWidgetState extends State<WhiteLabelWidget> {
               Expanded(
                   child: ElevatedButton(
                       onPressed: () => executeCardPayment(),
-                      child: const Text('Pay'))),
+                      child: Text(PaylikeLocalizator.getKey('PAY')))),
               const Spacer(),
             ]),
-            Visibility(
-                visible: Platform.isIOS,
-                child: Container(
-                  child: const Text('OR'),
-                  margin: const EdgeInsets.only(top: 5, bottom: 5),
-                )),
             Visibility(
                 visible: Platform.isIOS,
                 child: Row(children: [

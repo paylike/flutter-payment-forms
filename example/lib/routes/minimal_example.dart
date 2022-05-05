@@ -27,6 +27,15 @@ class MinimalWhitelabelExample extends StatelessWidget {
                   options: BasePayment(
                       amount: Money.fromDouble(
                           currencies.byCode(CurrencyCode.EUR), 11.5)),
+                  testConfig: {
+                    'card': {
+                      'balance': {
+                        'currency': currencies.byCode(CurrencyCode.EUR).code,
+                        'value': 0,
+                        'exponent': 0,
+                      }
+                    }
+                  },
                 ))
           ],
           mainAxisAlignment: MainAxisAlignment.center,

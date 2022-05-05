@@ -3,6 +3,8 @@ import 'package:paylike_sdk/src/repository/single.dart';
 
 /// Defines a repository responsible for the expiry field
 class ExpiryRepository extends SingleRepository<String> {
+  ExpiryRepository({required bool Function(String) validator})
+      : super(validator: validator);
   Expiry get parse {
     var slice = item.split("/");
     if (slice.length != 2) {

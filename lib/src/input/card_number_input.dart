@@ -4,20 +4,29 @@ import 'package:paylike_sdk/src/input/base_input.dart';
 import 'package:paylike_sdk/src/repository/single.dart';
 
 import 'card_types.dart';
+import 'display_service.dart';
 import 'formatters.dart';
 
 /// Used for handling the card input field
 class CardInput extends StatefulWidget {
   /// Stores the value of the field
-  final SingleRepository<String> fieldRepository;
-  const CardInput({Key? key, required this.fieldRepository}) : super(key: key);
+  final SingleRepository<String> repository;
+
+  /// State of the input used for coloring the input field
+  final InputDisplayService service;
+
+  const CardInput({Key? key, required this.repository, required this.service})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() => _CardInputState();
 }
 
-class _CardInputState extends State<CardInput> with EmptyBuildCounter {
+class _CardInputState extends State<CardInput>
+    with EmptyBuildCounter, ValidatableInput {
   /// Used for the editable field
   final TextEditingController _numberCtrl = TextEditingController();
+
+  /// Returns a card icon based on the card number (Either Visa or Mastercard)
   Widget _getCardIcon() {
     if (_numberCtrl.text.isEmpty) {
       return CardIcons.get(CardTypes.generic);
@@ -32,10 +41,22 @@ class _CardInputState extends State<CardInput> with EmptyBuildCounter {
     return CardIcons.get(CardTypes.generic);
   }
 
+  /// Listens to service events
+  void _listener() {
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
-    widget.fieldRepository.set("");
+    widget.repository.set("");
+    widget.service.addListener(_listener);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.service.removeListener(_listener);
   }
 
   @override
@@ -48,15 +69,21 @@ class _CardInputState extends State<CardInput> with EmptyBuildCounter {
         FilteringTextInputFormatter.digitsOnly,
         CardNumberFormatter()
       ],
+      style: TextStyle(
+          color: getColorForValidation(context, widget.service.current)),
       buildCounter: emptyBuildCounter,
       maxLength: 23,
       onChanged: (String? value) {
         if (value != null) {
-          widget.fieldRepository.set(value);
+          widget.repository.set(value);
         } else {
-          widget.fieldRepository.set("");
+          widget.repository.set("");
         }
-        setState(() => {});
+        if (widget.service.current != InputStates.wip) {
+          widget.service.change(InputStates.wip);
+        } else {
+          setState(() => {});
+        }
       },
       decoration: InputDecoration(
           hintText: '0000 0000 0000 0000',
