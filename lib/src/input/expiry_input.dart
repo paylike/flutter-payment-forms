@@ -6,14 +6,14 @@ import 'display_service.dart';
 import 'formatters.dart';
 
 /// Used for handling expiry input
-class ExpiryInput extends StatefulWidget {
-  /// Repository of the input
-  final SingleRepository<String> repository;
+class ExpiryInput extends PaylikeInputWidget<String> {
+  /// For more information check [PaylikeInputWidget]
+  const ExpiryInput(
+      {Key? key,
+      required SingleRepository<String> repository,
+      required InputDisplayService service})
+      : super(key: key, repository: repository, service: service);
 
-  /// State of the input used for coloring the input field
-  final InputDisplayService service;
-  const ExpiryInput({Key? key, required this.repository, required this.service})
-      : super(key: key);
   @override
   State<StatefulWidget> createState() => _ExpiryInputState();
 }
@@ -22,23 +22,6 @@ class _ExpiryInputState extends State<ExpiryInput>
     with EmptyBuildCounter, ValidatableInput {
   /// Used for the editable field
   final TextEditingController _expiryCtrl = TextEditingController();
-
-  /// Listens to service events
-  void _listener() {
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    widget.service.addListener(_listener);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    widget.service.removeListener(_listener);
-  }
 
   @override
   Widget build(BuildContext context) {

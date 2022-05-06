@@ -4,15 +4,19 @@ import 'package:paylike_sdk/src/input/base_input.dart';
 import 'package:paylike_sdk/src/input/display_service.dart';
 import 'package:paylike_sdk/src/repository/single.dart';
 
-/// Used for handling CVC input
-class CVCInput extends StatefulWidget {
-  /// Repository to store CVC code
-  final SingleRepository<String> repository;
+mixin on State<PaylikeInputWidget<T>> {
+  String fos = '';
+}
 
-  /// State of the input used for coloring the input field
-  final InputDisplayService service;
-  const CVCInput({Key? key, required this.repository, required this.service})
-      : super(key: key);
+/// Used for handling CVC input
+class CVCInput extends PaylikeInputWidget<String> {
+  /// For more information check [PaylikeInputWidget]
+  const CVCInput(
+      {Key? key,
+      required SingleRepository<String> repository,
+      required InputDisplayService service})
+      : super(key: key, repository: repository, service: service);
+
   @override
   State<StatefulWidget> createState() => _CVCInputState();
 }

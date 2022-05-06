@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:paylike_sdk/src/repository/single.dart';
+
+import 'display_service.dart';
 
 /// Small mixin to remove unnecessary counter
 /// from input fields
@@ -26,7 +29,24 @@ enum InputStates {
 }
 
 /// Describes an input component that can be validated
-mixin ValidatableInput {
+mixin ValidatableInput<T extends PaylikeInputWidget> on State<T> {
+  /// Updates view if service triggers it
+  void _listener() {
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    widget.service.addListener(_listener);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.service.removeListener(_listener);
+  }
+
   /// Returns the text style that matches the validation state
   Color getColorForValidation(BuildContext context, InputStates state) {
     switch (state) {
@@ -38,4 +58,16 @@ mixin ValidatableInput {
         return Theme.of(context).colorScheme.error;
     }
   }
+}
+
+abstract class PaylikeInputWidget<T> extends StatefulWidget {
+  /// State of the input used for coloring the input field
+  final InputDisplayService service;
+
+  /// Repository to store the input
+  final SingleRepository<T> repository;
+
+  const PaylikeInputWidget(
+      {Key? key, required this.repository, required this.service})
+      : super(key: key);
 }

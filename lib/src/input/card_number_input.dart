@@ -8,15 +8,14 @@ import 'display_service.dart';
 import 'formatters.dart';
 
 /// Used for handling the card input field
-class CardInput extends StatefulWidget {
-  /// Stores the value of the field
-  final SingleRepository<String> repository;
+class CardInput extends PaylikeInputWidget<String> {
+  /// For more information check [PaylikeInputWidget]
+  const CardInput(
+      {Key? key,
+      required SingleRepository<String> repository,
+      required InputDisplayService service})
+      : super(key: key, repository: repository, service: service);
 
-  /// State of the input used for coloring the input field
-  final InputDisplayService service;
-
-  const CardInput({Key? key, required this.repository, required this.service})
-      : super(key: key);
   @override
   State<StatefulWidget> createState() => _CardInputState();
 }
@@ -39,24 +38,6 @@ class _CardInputState extends State<CardInput>
       return CardIcons.get(CardTypes.mastercard);
     }
     return CardIcons.get(CardTypes.generic);
-  }
-
-  /// Listens to service events
-  void _listener() {
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    widget.repository.set("");
-    widget.service.addListener(_listener);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    widget.service.removeListener(_listener);
   }
 
   @override
