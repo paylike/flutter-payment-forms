@@ -1,4 +1,5 @@
 import 'package:example/routes/complex_example.dart';
+import 'package:example/routes/error_localisation_example.dart';
 import 'package:example/routes/home.dart';
 import 'package:example/routes/minimal_example.dart';
 import 'package:flutter/cupertino.dart';
@@ -75,6 +76,8 @@ class _MyAppState extends State<MyApp> {
       '/example/minimal': (context) => MinimalWhitelabelExample(
           engine: widget._engine, currencies: widget._currencies),
       '/example/complex': (context) => ComplexWhiteLabelExample(
+          engine: widget._engine, currencies: widget._currencies),
+      '/example/error-localisation': (context) => ErrorLocalisationExample(
           engine: widget._engine, currencies: widget._currencies)
     };
     if (appType == ExampleAppType.cupertino) {

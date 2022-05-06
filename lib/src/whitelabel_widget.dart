@@ -75,9 +75,6 @@ class WhiteLabelWidgetState extends State<WhiteLabelWidget> {
 
   Future<void> _errorHandler(Function() fn) async {
     try {
-      if (!inputsValid()) {
-        throw Exception('Invalid card information. Please try again.');
-      }
       await fn();
     } on PaylikeException catch (e) {
       _errorMessageRepository.set(PaylikeFormsError(apiException: e));
@@ -107,6 +104,9 @@ class WhiteLabelWidgetState extends State<WhiteLabelWidget> {
   /// Executes a card payment based on the input information
   void _executeCardPayment() async {
     await _errorHandler(() async {
+      if (!inputsValid()) {
+        throw Exception('Invalid card information. Please try again.');
+      }
       var number = _cardNumberRepository.item.replaceAll(" ", "");
       var cvc = _cvcRepository.item;
       var tokenized = await widget.engine.tokenize(number, cvc);

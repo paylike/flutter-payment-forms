@@ -81,6 +81,16 @@ class HomeScreen extends StatelessWidget {
               onPressed: _navigateTo(context, '/example/minimal'),
             ),
             HomeItem(
+              title: 'Error & localisation example',
+              description:
+                  'Examples of different error scenarios and languages',
+              platforms: const [
+                AvailabilityPlatforms.ios,
+                AvailabilityPlatforms.android
+              ],
+              onPressed: _navigateTo(context, '/example/error-localisation'),
+            ),
+            HomeItem(
               title: 'Complex whitelabel example',
               description:
                   'Example to showcase the capabilities of our form builder',
