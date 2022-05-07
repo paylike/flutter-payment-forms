@@ -15,9 +15,10 @@ class CustomNoteInput extends PaylikeExtensionInputWidget<String> {
       : super(
             key: key,
             service: InputDisplayService(),
-            repository: SingleCustomRepository<String>(
-                validator: (String value) => value.isNotEmpty,
-                serializer: (String value) => {'note': value}));
+            repository: SingleCustomRepository<String>.withDefaultValue('',
+                validator: (_) => true,
+                serializer: (String value) =>
+                    value.isEmpty ? {} : {'note': value}));
   @override
   State<StatefulWidget> createState() => _CustomNoteInputState();
 }

@@ -30,7 +30,6 @@ class _ComplexWhiteLabelWidgetState extends WhiteLabelWidgetState {
   Widget build(BuildContext context) {
     var _widget = widget as ComplexWhiteLabelWidget;
     _widget.extensions.sort((a, b) => a.order.compareTo(b.order));
-    _widget.extensions.forEach((element) => print(element.order));
     return Form(
         key: formKey,
         child: Column(
@@ -72,8 +71,6 @@ class _ComplexWhiteLabelWidgetState extends WhiteLabelWidgetState {
   @override
   bool inputsValid() {
     var _widget = widget as ComplexWhiteLabelWidget;
-
-    /// For every item in _widget.extensions
     for (var extension in _widget.extensions) {
       extension.service.change(extension.repository.isValid()
           ? InputStates.valid

@@ -8,6 +8,11 @@ class SingleCustomRepository<T> extends SingleRepository<T> {
       {required bool Function(T) validator, required this.serializer})
       : super(validator: validator);
 
+  /// Use this constructor to set a default value on initialisation
+  SingleCustomRepository.withDefaultValue(T value,
+      {required bool Function(T) validator, required this.serializer})
+      : super.withDefaultValue(value, validator);
+
   /// Returns the serialized item
   Map<String, dynamic> toJson() => serializer(item);
 }

@@ -6,7 +6,15 @@ class SingleRepository<T> {
   final bool Function(T) validator;
 
   SingleRepository({required this.validator});
+
+  /// Use this constructor to set a default value on initialisation
+  SingleRepository.withDefaultValue(T value, this.validator) {
+    _single = value;
+  }
+
   T? _single;
+
+  /// Returns the item if available, throws a [NotFoundException] if not
   T get item {
     if (_single != null) {
       return _single as T;
@@ -15,6 +23,7 @@ class SingleRepository<T> {
   }
 
   /// Calls the validation
+  /// If the item is null, it will return with false by default
   bool isValid() {
     if (item == null) return false;
     return validator(item);
