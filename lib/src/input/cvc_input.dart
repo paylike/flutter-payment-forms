@@ -4,10 +4,6 @@ import 'package:paylike_sdk/src/input/base_input.dart';
 import 'package:paylike_sdk/src/input/display_service.dart';
 import 'package:paylike_sdk/src/repository/single.dart';
 
-mixin on State<PaylikeInputWidget<T>> {
-  String fos = '';
-}
-
 /// Used for handling CVC input
 class CVCInput extends PaylikeInputWidget<String> {
   /// For more information check [PaylikeInputWidget]
@@ -23,23 +19,6 @@ class CVCInput extends PaylikeInputWidget<String> {
 
 class _CVCInputState extends State<CVCInput>
     with EmptyBuildCounter, ValidatableInput {
-  /// Updates view if service triggers it
-  void _listener() {
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    widget.service.addListener(_listener);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    widget.service.removeListener(_listener);
-  }
-
   /// Used for the editable field
   final TextEditingController _cvcCtrl = TextEditingController();
   @override

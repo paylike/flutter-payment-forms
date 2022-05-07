@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:paylike_sdk/src/repository/single.dart';
+import 'package:paylike_sdk/src/repository/single_custom.dart';
 
 import 'display_service.dart';
 
@@ -28,7 +29,41 @@ enum InputStates {
   invalid,
 }
 
+/// Describes a generic input widget that can be used inside the form and
+/// developed by the paylike team. Use [PaylikeExtensionInputWidget] to create extensions!
+abstract class PaylikeInputWidget<T> extends StatefulWidget {
+  /// State of the input used for coloring the input field
+  final InputDisplayService service;
+
+  /// Repository to store the input
+  final SingleRepository<T> repository;
+
+  const PaylikeInputWidget(
+      {Key? key, required this.repository, required this.service})
+      : super(key: key);
+}
+
+/// Describes a generic input widget that can be used inside the form and is an extension
+/// by an SDK user
+abstract class PaylikeExtensionInputWidget<T> extends StatefulWidget {
+  /// State of the input used for coloring the input field
+  final InputDisplayService service;
+
+  /// Repository to store the input
+  final SingleCustomRepository<T> repository;
+
+  const PaylikeExtensionInputWidget(
+      {Key? key, required this.repository, required this.service})
+      : super(key: key);
+}
+
 /// Describes an input component that can be validated
+///
+/// Under the hood it exposes a function to trigger
+/// ```dart
+/// setState(() {});
+/// ```
+/// whenever the input state changes in the service
 mixin ValidatableInput<T extends PaylikeInputWidget> on State<T> {
   /// Updates view if service triggers it
   void _listener() {
@@ -58,16 +93,4 @@ mixin ValidatableInput<T extends PaylikeInputWidget> on State<T> {
         return Theme.of(context).colorScheme.error;
     }
   }
-}
-
-abstract class PaylikeInputWidget<T> extends StatefulWidget {
-  /// State of the input used for coloring the input field
-  final InputDisplayService service;
-
-  /// Repository to store the input
-  final SingleRepository<T> repository;
-
-  const PaylikeInputWidget(
-      {Key? key, required this.repository, required this.service})
-      : super(key: key);
 }

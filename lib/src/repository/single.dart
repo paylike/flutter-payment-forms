@@ -4,6 +4,7 @@ import 'package:paylike_sdk/src/exceptions.dart';
 class SingleRepository<T> {
   /// Validates the item
   final bool Function(T) validator;
+
   SingleRepository({required this.validator});
   T? _single;
   T get item {

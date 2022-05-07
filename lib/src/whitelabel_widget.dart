@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:paylike_flutter_engine/engine_widget.dart';
 import 'package:paylike_flutter_engine/paylike_flutter_engine.dart';
@@ -102,7 +103,7 @@ class WhiteLabelWidgetState extends State<WhiteLabelWidget> {
   }
 
   /// Executes a card payment based on the input information
-  void _executeCardPayment() async {
+  void executeCardPayment() async {
     await _errorHandler(() async {
       if (!inputsValid()) {
         throw Exception('Invalid card information. Please try again.');
@@ -122,7 +123,7 @@ class WhiteLabelWidgetState extends State<WhiteLabelWidget> {
   }
 
   /// Executes an Apple Pay payment
-  void _executeApplePayPayment(Map<String, dynamic> result) async {
+  void executeApplePayPayment(Map<String, dynamic> result) async {
     await _errorHandler(() async {
       var token = result['token'];
       var tokenized = await widget.engine.tokenizeAppleToken(token);
@@ -132,7 +133,7 @@ class WhiteLabelWidgetState extends State<WhiteLabelWidget> {
     });
   }
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   /// Card number
 
@@ -158,14 +159,16 @@ class WhiteLabelWidgetState extends State<WhiteLabelWidget> {
       SingleRepository(validator: (e) => true);
 
   /// Webview widget provided by [PaylikeEngineWidget]
-  Widget _webview() {
+  @nonVirtual
+  Widget webview() {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       PaylikeEngineWidget(engine: widget.engine, showEmptyState: true),
     ]);
   }
 
   /// Card number, expiry and CVC inputs
-  List<Widget> _inputFields() {
+  @nonVirtual
+  List<Widget> inputFields() {
     return [
       CardInput(repository: _cardNumberRepository, service: _cardService),
       Row(
@@ -183,7 +186,8 @@ class WhiteLabelWidgetState extends State<WhiteLabelWidget> {
   }
 
   /// Error message display
-  Widget _formError() {
+  @nonVirtual
+  Widget formError() {
     return WhitelabelErrorWidget(
         isVisible: _errorMessageRepository.isAvailable,
         message: _errorMessageRepository.isAvailable
@@ -192,13 +196,14 @@ class WhiteLabelWidgetState extends State<WhiteLabelWidget> {
   }
 
   /// Card pay and apple pay button
-  List<Widget> _payButtons() {
+  @nonVirtual
+  List<Widget> payButtons() {
     return [
       Row(children: [
         const Spacer(),
         Expanded(
             child: ElevatedButton(
-                onPressed: () => _executeCardPayment(),
+                onPressed: () => executeCardPayment(),
                 child: Text(PaylikeLocalizator.getKey('PAY')))),
         const Spacer(),
       ]),
@@ -219,7 +224,7 @@ class WhiteLabelWidgetState extends State<WhiteLabelWidget> {
               ],
               style: ApplePayButtonStyle.black,
               type: ApplePayButtonType.buy,
-              onPaymentResult: _executeApplePayPayment,
+              onPaymentResult: executeApplePayPayment,
               loadingIndicator: const Center(
                 child: CircularProgressIndicator(),
               ),
@@ -232,13 +237,13 @@ class WhiteLabelWidgetState extends State<WhiteLabelWidget> {
   @override
   Widget build(BuildContext context) {
     return Form(
-        key: _formKey,
+        key: formKey,
         child: Column(
           children: [
-            _webview(),
-            ..._inputFields(),
-            _formError(),
-            ..._payButtons(),
+            webview(),
+            ...inputFields(),
+            formError(),
+            ...payButtons(),
           ],
         ));
   }
