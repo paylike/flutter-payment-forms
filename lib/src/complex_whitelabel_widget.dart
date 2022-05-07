@@ -29,15 +29,20 @@ class _ComplexWhiteLabelWidgetState extends WhiteLabelWidgetState {
   @override
   Widget build(BuildContext context) {
     var _widget = widget as ComplexWhiteLabelWidget;
+    _widget.extensions.sort((a, b) => a.order.compareTo(b.order));
+    _widget.extensions.forEach((element) => print(element.order));
     return Form(
         key: formKey,
         child: Column(
           children: [
+            ..._widget.extensions.where((e) => e.order < 0),
             webview(),
+            ..._widget.extensions.where((e) => e.order == 0),
             ...inputFields(),
-            ..._widget.extensions,
+            ..._widget.extensions.where((e) => e.order == 1),
             formError(),
             ...payButtons(),
+            ..._widget.extensions.where((e) => e.order > 1),
           ],
         ));
   }
@@ -74,9 +79,9 @@ class _ComplexWhiteLabelWidgetState extends WhiteLabelWidgetState {
           ? InputStates.valid
           : InputStates.invalid);
     }
-
-    return _widget.extensions
-            .every((w) => w.service.current == InputStates.valid) &&
-        super.inputsValid();
+    var extensionValid =
+        _widget.extensions.every((w) => w.service.current == InputStates.valid);
+    var builtInValid = super.inputsValid();
+    return extensionValid && builtInValid;
   }
 }

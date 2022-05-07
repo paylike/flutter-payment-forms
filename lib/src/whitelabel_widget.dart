@@ -106,7 +106,7 @@ class WhiteLabelWidgetState extends State<WhiteLabelWidget> {
   void executeCardPayment() async {
     await _errorHandler(() async {
       if (!inputsValid()) {
-        throw Exception('Invalid card information. Please try again.');
+        throw Exception('Invalid input information. Please try again.');
       }
       var number = _cardNumberRepository.item.replaceAll(" ", "");
       var cvc = _cvcRepository.item;
