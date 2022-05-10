@@ -36,6 +36,17 @@ class _CVCInputState extends State<CVCInput>
         : cupertino(context);
   }
 
+  void _onChanged(String? value) {
+    if (value != null) {
+      widget.repository.set(value);
+    }
+    if (widget.service.current != InputStates.wip) {
+      widget.service.change(InputStates.wip);
+    } else {
+      setState(() => {});
+    }
+  }
+
   @override
   Widget material(BuildContext context) {
     return TextFormField(
@@ -51,38 +62,21 @@ class _CVCInputState extends State<CVCInput>
           hintText: 'XXX',
         ),
         buildCounter: emptyBuildCounter,
-        onChanged: (String? value) {
-          if (value != null) {
-            widget.repository.set(value);
-          }
-          if (widget.service.current != InputStates.wip) {
-            widget.service.change(InputStates.wip);
-          } else {
-            setState(() => {});
-          }
-        });
+        onChanged: _onChanged);
   }
 
   @override
   Widget cupertino(BuildContext context) {
     return CupertinoTextField(
       placeholder: 'XXX',
+      maxLength: 3,
       controller: _cvcCtrl,
       keyboardType: TextInputType.number,
       inputFormatters: [
         FilteringTextInputFormatter.digitsOnly,
       ],
       textInputAction: TextInputAction.next,
-      onChanged: (String? value) {
-        if (value != null) {
-          widget.repository.set(value);
-        }
-        if (widget.service.current != InputStates.wip) {
-          widget.service.change(InputStates.wip);
-        } else {
-          setState(() => {});
-        }
-      },
+      onChanged: _onChanged,
     );
   }
 }

@@ -175,12 +175,17 @@ class WhiteLabelWidgetState extends State<WhiteLabelWidget> {
   @nonVirtual
   List<Widget> inputFields() {
     return [
-      CardInput(repository: _cardNumberRepository, service: _cardService),
+      CardInput(
+          repository: _cardNumberRepository,
+          service: _cardService,
+          style: widget.style),
       Row(
         children: [
           Expanded(
               child: ExpiryInput(
-                  repository: _expiryRepository, service: _expiryService)),
+                  repository: _expiryRepository,
+                  service: _expiryService,
+                  style: widget.style)),
           const Spacer(),
           Expanded(
               child: CVCInput(
