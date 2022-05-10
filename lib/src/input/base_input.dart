@@ -117,12 +117,7 @@ mixin ValidatableExtensionInput<T extends PaylikeExtensionInputWidget>
 }
 
 /// Describes an input component that can be validated
-///
-/// Under the hood it exposes a function to trigger
-/// ```dart
-/// setState(() {});
-/// ```
-/// whenever the input state changes in the service
+/// and part of the essential inputs of the form
 mixin ValidatableInput<T extends PaylikeInputWidget> on State<T> {
   /// Updates view if service triggers it
   void _listener() {

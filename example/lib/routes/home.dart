@@ -62,7 +62,8 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(title: const Text('Paylike Payment Forms Demo')),
         body: SafeArea(
-            child: Column(
+            child: SingleChildScrollView(
+                child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Center(
@@ -101,6 +102,6 @@ class HomeScreen extends StatelessWidget {
               onPressed: _navigateTo(context, '/example/complex'),
             )
           ],
-        )));
+        ))));
   }
 }
