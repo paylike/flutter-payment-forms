@@ -16,14 +16,6 @@ void main() {
 /// Don't have a client ID? Head to [our platform](https://app.paylike.io) and create one
 const clientId = 'e393f9ec-b2f7-4f81-b455-ce45b02d355d';
 
-/// Describes how the application is being rendered
-///
-/// This is presetn to showcase that our widgets can render in both environments
-enum ExampleAppType {
-  material,
-  cupertino,
-}
-
 /// Showcases that the SDK works with Material design
 class MyApp extends StatefulWidget {
   final PaylikeCurrencies _currencies = PaylikeCurrencies();
@@ -38,20 +30,20 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  ExampleAppType appType = ExampleAppType.material;
+  PaylikeWidgetStyles style = PaylikeWidgetStyles.material;
   bool _themeChange = false;
 
   void _changeTheme() {
-    switch (appType) {
-      case ExampleAppType.cupertino:
+    switch (style) {
+      case PaylikeWidgetStyles.cupertino:
         setState(() {
-          appType = ExampleAppType.material;
+          style = PaylikeWidgetStyles.material;
           _themeChange = true;
         });
         break;
-      case ExampleAppType.material:
+      case PaylikeWidgetStyles.material:
         setState(() {
-          appType = ExampleAppType.cupertino;
+          style = PaylikeWidgetStyles.cupertino;
           _themeChange = true;
         });
         break;
@@ -63,7 +55,7 @@ class _MyAppState extends State<MyApp> {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       if (_themeChange) {
         showSimpleNotification(
-            appType == ExampleAppType.material
+            style == PaylikeWidgetStyles.material
                 ? const Text("Theme changed to material")
                 : const Text("Theme changed to cupertino"),
             background: Colors.green,
@@ -74,13 +66,13 @@ class _MyAppState extends State<MyApp> {
       '/': (context) =>
           HomeScreen(engine: widget._engine, changeTheme: _changeTheme),
       '/example/minimal': (context) => MinimalWhitelabelExample(
-          engine: widget._engine, currencies: widget._currencies),
+          engine: widget._engine, currencies: widget._currencies, style: style),
       '/example/complex': (context) => ComplexWhiteLabelExample(
           engine: widget._engine, currencies: widget._currencies),
       '/example/error-localisation': (context) => ErrorLocalisationExample(
           engine: widget._engine, currencies: widget._currencies)
     };
-    if (appType == ExampleAppType.cupertino) {
+    if (style == PaylikeWidgetStyles.cupertino) {
       return OverlaySupport.global(
           child: CupertinoApp(
               title: 'Paylike Payment Forms Demo',

@@ -1,16 +1,23 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:paylike_sdk/src/input/base_input.dart';
 import 'package:paylike_sdk/src/input/display_service.dart';
 import 'package:paylike_sdk/src/repository/single.dart';
 
+import '../styling/styles.dart';
+
 /// Used for handling CVC input
 class CVCInput extends PaylikeInputWidget<String> {
+  /// Style of the rendered component
+  final PaylikeWidgetStyles style;
+
   /// For more information check [PaylikeInputWidget]
   const CVCInput(
       {Key? key,
       required SingleRepository<String> repository,
-      required InputDisplayService service})
+      required InputDisplayService service,
+      this.style = PaylikeWidgetStyles.material})
       : super(key: key, repository: repository, service: service);
 
   @override
@@ -18,11 +25,19 @@ class CVCInput extends PaylikeInputWidget<String> {
 }
 
 class _CVCInputState extends State<CVCInput>
-    with EmptyBuildCounter, ValidatableInput {
+    with EmptyBuildCounter, ValidatableInput
+    implements StylablePaylikeWidget {
   /// Used for the editable field
   final TextEditingController _cvcCtrl = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    return widget.style == PaylikeWidgetStyles.material
+        ? material(context)
+        : cupertino(context);
+  }
+
+  @override
+  Widget material(BuildContext context) {
     return TextFormField(
         maxLength: 3,
         style: TextStyle(
@@ -46,5 +61,28 @@ class _CVCInputState extends State<CVCInput>
             setState(() => {});
           }
         });
+  }
+
+  @override
+  Widget cupertino(BuildContext context) {
+    return CupertinoTextField(
+      placeholder: 'XXX',
+      controller: _cvcCtrl,
+      keyboardType: TextInputType.number,
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+      ],
+      textInputAction: TextInputAction.next,
+      onChanged: (String? value) {
+        if (value != null) {
+          widget.repository.set(value);
+        }
+        if (widget.service.current != InputStates.wip) {
+          widget.service.change(InputStates.wip);
+        } else {
+          setState(() => {});
+        }
+      },
+    );
   }
 }

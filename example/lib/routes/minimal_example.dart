@@ -6,10 +6,16 @@ class MinimalWhitelabelExample extends StatelessWidget {
   /// Engine for the example
   final PaylikeEngine engine;
 
+  /// Describes the style of the example
+  final PaylikeWidgetStyles style;
+
   /// Currencies supported by Paylike
   final PaylikeCurrencies currencies;
   const MinimalWhitelabelExample(
-      {Key? key, required this.engine, required this.currencies})
+      {Key? key,
+      required this.engine,
+      required this.currencies,
+      this.style = PaylikeWidgetStyles.material})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -23,6 +29,7 @@ class MinimalWhitelabelExample extends StatelessWidget {
             Container(
                 margin: const EdgeInsets.all(10),
                 child: WhiteLabelWidget(
+                  style: style,
                   engine: engine,
                   options: BasePayment(
                       amount: Money.fromDouble(

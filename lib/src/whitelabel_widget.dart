@@ -18,6 +18,7 @@ import 'package:paylike_sdk/src/validators/cvc.dart';
 import 'package:paylike_sdk/src/validators/expiry.dart';
 
 import 'error_widget.dart';
+import 'styling/styles.dart';
 
 /// The most simple widget of the package built for providing
 /// a simple card, expiry and cvc code field, optionally a pay button as well
@@ -32,6 +33,9 @@ class WhiteLabelWidget extends StatefulWidget {
   /// [more info here.](https://github.com/paylike/api-reference/blob/main/payments/index.md#test)
   final Map<String, dynamic>? testConfig;
 
+  /// Describes the style which we use to render the default input components
+  final PaylikeWidgetStyles style;
+
   /// Describes the name of the payment config
   ///
   /// You need to have a payment config json in your assets
@@ -43,7 +47,8 @@ class WhiteLabelWidget extends StatefulWidget {
       required this.engine,
       required this.options,
       this.paymentConfigName = 'payment_config.json',
-      this.testConfig})
+      this.testConfig,
+      this.style = PaylikeWidgetStyles.material})
       : super(key: key);
   @override
   State<StatefulWidget> createState() => WhiteLabelWidgetState();
@@ -178,8 +183,10 @@ class WhiteLabelWidgetState extends State<WhiteLabelWidget> {
                   repository: _expiryRepository, service: _expiryService)),
           const Spacer(),
           Expanded(
-              child:
-                  CVCInput(repository: _cvcRepository, service: _cvcService)),
+              child: CVCInput(
+                  repository: _cvcRepository,
+                  service: _cvcService,
+                  style: widget.style)),
         ],
       )
     ];

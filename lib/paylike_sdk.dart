@@ -10,3 +10,4 @@ export 'src/input/base_input.dart';
 export 'src/input/display_service.dart';
 export 'src/repository/single.dart';
 export 'src/repository/single_custom.dart';
+export 'src/styling/styles.dart';
