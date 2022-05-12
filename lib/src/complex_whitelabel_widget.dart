@@ -40,7 +40,7 @@ class _ComplexWhiteLabelWidgetState extends WhiteLabelWidgetState {
             ...inputFields(),
             ..._widget.extensions.where((e) => e.order == 1),
             formError(),
-            ...payButtons(),
+            ...payButtons(context),
             ..._widget.extensions.where((e) => e.order > 1),
           ],
         ));

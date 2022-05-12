@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:paylike_sdk/paylike_sdk.dart';
 
@@ -19,24 +20,35 @@ class MinimalWhitelabelExample extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
+    var content = SafeArea(
+        child: Center(
+            child: SingleChildScrollView(
+                child: Column(
+      children: [
+        Container(
+            margin: const EdgeInsets.all(10),
+            child: WhiteLabelWidget(
+              style: style,
+              engine: engine,
+              options: BasePayment(
+                  amount: Money.fromDouble(
+                      currencies.byCode(CurrencyCode.EUR), 11.5)),
+            ))
+      ],
+      mainAxisAlignment: MainAxisAlignment.center,
+    ))));
+
+    if (style == PaylikeWidgetStyles.cupertino) {
+      return CupertinoPageScaffold(
+        child: content,
+        navigationBar: const CupertinoNavigationBar(
+          middle: Text('Minimal white label demo'),
+        ),
+      );
+    }
     return Scaffold(
-        appBar: AppBar(title: const Text('Minimal white label demo')),
-        body: SafeArea(
-            child: Center(
-                child: SingleChildScrollView(
-                    child: Column(
-          children: [
-            Container(
-                margin: const EdgeInsets.all(10),
-                child: WhiteLabelWidget(
-                  style: style,
-                  engine: engine,
-                  options: BasePayment(
-                      amount: Money.fromDouble(
-                          currencies.byCode(CurrencyCode.EUR), 11.5)),
-                ))
-          ],
-          mainAxisAlignment: MainAxisAlignment.center,
-        )))));
+      appBar: AppBar(title: const Text('Minimal white label demo')),
+      body: content,
+    );
   }
 }

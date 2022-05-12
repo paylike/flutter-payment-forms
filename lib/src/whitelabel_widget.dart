@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:paylike_flutter_engine/engine_widget.dart';
@@ -209,14 +210,30 @@ class WhiteLabelWidgetState extends State<WhiteLabelWidget> {
 
   /// Card pay and apple pay button
   @nonVirtual
-  List<Widget> payButtons() {
+  List<Widget> payButtons(BuildContext context) {
+    Widget payButton = ElevatedButton(
+        onPressed: () => executeCardPayment(),
+        child: Text(PaylikeLocalizator.getKey('PAY')));
+
+    var backgroundColor =
+        Theme.of(context).backgroundColor; // this color could be anything
+    var applePayColor = backgroundColor.computeLuminance() > 0.5
+        ? ApplePayButtonStyle.black
+        : ApplePayButtonStyle.white;
+    if (widget.style == PaylikeWidgetStyles.cupertino) {
+      payButton = CupertinoButton(
+          child: Text(PaylikeLocalizator.getKey('PAY')),
+          onPressed: () => executeCardPayment());
+      backgroundColor = CupertinoTheme.of(context)
+          .scaffoldBackgroundColor; // this color could be anything
+      applePayColor = backgroundColor.computeLuminance() > 0.5
+          ? ApplePayButtonStyle.black
+          : ApplePayButtonStyle.white;
+    }
     return [
       Row(children: [
         const Spacer(),
-        Expanded(
-            child: ElevatedButton(
-                onPressed: () => executeCardPayment(),
-                child: Text(PaylikeLocalizator.getKey('PAY')))),
+        Expanded(child: payButton),
         const Spacer(),
       ]),
       Visibility(
@@ -234,7 +251,7 @@ class WhiteLabelWidgetState extends State<WhiteLabelWidget> {
                             const PaymentAmountStringOptions(currency: false)),
                     status: PaymentItemStatus.final_price)
               ],
-              style: ApplePayButtonStyle.black,
+              style: applePayColor,
               type: ApplePayButtonType.buy,
               onPaymentResult: executeApplePayPayment,
               loadingIndicator: const Center(
@@ -255,7 +272,7 @@ class WhiteLabelWidgetState extends State<WhiteLabelWidget> {
             webview(),
             ...inputFields(),
             formError(),
-            ...payButtons(),
+            ...payButtons(context),
           ],
         ));
   }

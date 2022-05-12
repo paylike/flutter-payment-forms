@@ -63,8 +63,8 @@ class _MyAppState extends State<MyApp> {
       }
     });
     var routes = {
-      '/': (context) =>
-          HomeScreen(engine: widget._engine, changeTheme: _changeTheme),
+      '/': (context) => HomeScreen(
+          engine: widget._engine, changeTheme: _changeTheme, style: style),
       '/example/minimal': (context) => MinimalWhitelabelExample(
           engine: widget._engine, currencies: widget._currencies, style: style),
       '/example/complex': (context) => ComplexWhiteLabelExample(
