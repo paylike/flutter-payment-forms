@@ -68,9 +68,9 @@ class _MyAppState extends State<MyApp> {
       '/example/minimal': (context) => MinimalWhitelabelExample(
           engine: widget._engine, currencies: widget._currencies, style: style),
       '/example/complex': (context) => ComplexWhiteLabelExample(
-          engine: widget._engine, currencies: widget._currencies),
+          engine: widget._engine, currencies: widget._currencies, style: style),
       '/example/error-localisation': (context) => ErrorLocalisationExample(
-          engine: widget._engine, currencies: widget._currencies)
+          engine: widget._engine, currencies: widget._currencies, style: style)
     };
     if (style == PaylikeWidgetStyles.cupertino) {
       return OverlaySupport.global(
@@ -82,7 +82,9 @@ class _MyAppState extends State<MyApp> {
                 DefaultCupertinoLocalizations.delegate,
               ],
               initialRoute: '/',
-              routes: routes));
+              routes: routes,
+              theme: const CupertinoThemeData(
+                  primaryColor: CupertinoColors.link)));
     }
     return OverlaySupport.global(
         child: MaterialApp(

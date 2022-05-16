@@ -214,9 +214,7 @@ class WhiteLabelWidgetState extends State<WhiteLabelWidget> {
     Widget payButton = ElevatedButton(
         onPressed: () => executeCardPayment(),
         child: Text(PaylikeLocalizator.getKey('PAY')));
-
-    var backgroundColor =
-        Theme.of(context).backgroundColor; // this color could be anything
+    var backgroundColor = Theme.of(context).backgroundColor;
     var applePayColor = backgroundColor.computeLuminance() > 0.5
         ? ApplePayButtonStyle.black
         : ApplePayButtonStyle.white;
@@ -224,8 +222,7 @@ class WhiteLabelWidgetState extends State<WhiteLabelWidget> {
       payButton = CupertinoButton(
           child: Text(PaylikeLocalizator.getKey('PAY')),
           onPressed: () => executeCardPayment());
-      backgroundColor = CupertinoTheme.of(context)
-          .scaffoldBackgroundColor; // this color could be anything
+      backgroundColor = CupertinoTheme.of(context).scaffoldBackgroundColor;
       applePayColor = backgroundColor.computeLuminance() > 0.5
           ? ApplePayButtonStyle.black
           : ApplePayButtonStyle.white;

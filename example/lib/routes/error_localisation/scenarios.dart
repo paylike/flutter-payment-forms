@@ -136,12 +136,6 @@ abstract class ErrorScenarios {
       lostCard,
       limitTooLow,
       insufficentFunds,
-      fingerprintTimeout,
-      tdsFingerprintTimeout,
-      tdsFingerprintUnavailable,
-      tdsRejected,
-      tdsUnavailable,
-      tdsAttempted,
     ];
   }
 }

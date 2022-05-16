@@ -4,19 +4,22 @@ import 'package:paylike_sdk/paylike_sdk.dart';
 /// Made to be extandable with additonal fields compared to [WhiteLabelWidget]
 class ComplexWhiteLabelWidget extends WhiteLabelWidget {
   /// For more informations about options check also [WhiteLabelWidget]
+  ///
   const ComplexWhiteLabelWidget(
       {Key? key,
       required PaylikeEngine engine,
       required BasePayment options,
       Map<String, dynamic>? testConfig,
       this.extensions = const [],
-      String paymentConfigName = 'payment_config.json'})
+      String paymentConfigName = 'payment_config.json',
+      PaylikeWidgetStyles style = PaylikeWidgetStyles.material})
       : super(
             key: key,
             engine: engine,
             options: options,
             testConfig: testConfig,
-            paymentConfigName: paymentConfigName);
+            paymentConfigName: paymentConfigName,
+            style: style);
 
   /// Used for adding additional fields to the widget
   final List<PaylikeExtensionInputWidget> extensions;

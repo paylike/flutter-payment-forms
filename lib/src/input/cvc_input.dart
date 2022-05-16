@@ -77,6 +77,7 @@ class _CVCInputState extends State<CVCInput>
       ],
       textInputAction: TextInputAction.next,
       onChanged: _onChanged,
+      decoration: const BoxDecoration(border: Border()),
     );
   }
 }

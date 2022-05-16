@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:paylike_sdk/paylike_sdk.dart';
+
+import '../stylable.dart';
 
 /// Describes information in the name input field
 class _Name {
@@ -24,15 +27,18 @@ class _Name {
 
 /// Implementation of an unvalidated simple note input
 class CustomNameInput extends PaylikeExtensionInputWidget<_Name> {
+  /// Describes the style of the example
+  final PaylikeWidgetStyles style;
   const CustomNameInput(
       {Key? key,
       required SingleCustomRepository<_Name> repository,
-      required InputDisplayService service})
+      required InputDisplayService service,
+      this.style = PaylikeWidgetStyles.material})
       : super(key: key, repository: repository, service: service, order: 0);
 
   /// You can use named constructors to define encapsulated service and repository
   /// if you want to. This makes easier to keep the codebase clean and readable.
-  CustomNameInput.init({Key? key})
+  CustomNameInput.init({Key? key, this.style = PaylikeWidgetStyles.material})
       : super(
             key: key,
             order: 0,
@@ -77,23 +83,9 @@ class _CustomNameInput extends State<CustomNameInput>
           Row(
             children: [
               Expanded(
-                  child: TextFormField(
-                      controller: _firstNameCtrl,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none, hintText: 'John'),
-                      style: TextStyle(
-                          color: _getColorForValidation(
-                              context, widget.repository.item.firstName)),
-                      onChanged: (String? value) {
-                        if (value != null) {
-                          widget.repository.set(_Name.copy(
-                              widget.repository.item,
-                              firstName: value));
-                        }
-                        if (widget.service.current != InputStates.wip) {
-                          widget.service.change(InputStates.wip);
-                        }
-                      }))
+                  child: widget.style == PaylikeWidgetStyles.material
+                      ? _materialFirstName(context)
+                      : _cupertinoFirstName(context))
             ],
           ),
         ])),
@@ -104,27 +96,83 @@ class _CustomNameInput extends State<CustomNameInput>
             const Text('Last name'),
             Row(children: [
               Expanded(
-                  child: TextFormField(
-                      controller: _lastNameCtrl,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none, hintText: 'Doe'),
-                      style: TextStyle(
-                          color: _getColorForValidation(
-                              context, widget.repository.item.lastName)),
-                      onChanged: (String? value) {
-                        if (value != null) {
-                          widget.repository.set(_Name.copy(
-                              widget.repository.item,
-                              lastName: value));
-                        }
-                        if (widget.service.current != InputStates.wip) {
-                          widget.service.change(InputStates.wip);
-                        }
-                      }))
+                  child: widget.style == PaylikeWidgetStyles.material
+                      ? _materialLastName(context)
+                      : _cupertinoLastName(context))
             ]),
           ],
         ))
       ],
     );
+  }
+
+  Widget _cupertinoFirstName(BuildContext context) {
+    return CupertinoTextField(
+      controller: _firstNameCtrl,
+      onChanged: (String value) {
+        widget.repository
+            .set(_Name.copy(widget.repository.item, firstName: value));
+        if (widget.service.current != InputStates.wip) {
+          widget.service.change(InputStates.wip);
+        }
+      },
+      placeholder: 'John',
+      placeholderStyle: const TextStyle(color: Colors.grey),
+      decoration: const BoxDecoration(border: Border()),
+    );
+  }
+
+  Widget _materialFirstName(BuildContext context) {
+    return TextFormField(
+        controller: _firstNameCtrl,
+        decoration:
+            const InputDecoration(border: InputBorder.none, hintText: 'John'),
+        style: TextStyle(
+            color: _getColorForValidation(
+                context, widget.repository.item.firstName)),
+        onChanged: (String? value) {
+          if (value != null) {
+            widget.repository
+                .set(_Name.copy(widget.repository.item, firstName: value));
+          }
+          if (widget.service.current != InputStates.wip) {
+            widget.service.change(InputStates.wip);
+          }
+        });
+  }
+
+  Widget _cupertinoLastName(BuildContext context) {
+    return CupertinoTextField(
+      controller: _lastNameCtrl,
+      onChanged: (String value) {
+        widget.repository
+            .set(_Name.copy(widget.repository.item, lastName: value));
+        if (widget.service.current != InputStates.wip) {
+          widget.service.change(InputStates.wip);
+        }
+      },
+      placeholder: 'Doe',
+      placeholderStyle: const TextStyle(color: Colors.grey),
+      decoration: const BoxDecoration(border: Border()),
+    );
+  }
+
+  Widget _materialLastName(BuildContext context) {
+    return TextFormField(
+        controller: _lastNameCtrl,
+        decoration:
+            const InputDecoration(border: InputBorder.none, hintText: 'Doe'),
+        style: TextStyle(
+            color: _getColorForValidation(
+                context, widget.repository.item.lastName)),
+        onChanged: (String? value) {
+          if (value != null) {
+            widget.repository
+                .set(_Name.copy(widget.repository.item, lastName: value));
+          }
+          if (widget.service.current != InputStates.wip) {
+            widget.service.change(InputStates.wip);
+          }
+        });
   }
 }

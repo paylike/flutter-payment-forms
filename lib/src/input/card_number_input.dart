@@ -75,8 +75,10 @@ class _CardInputState extends State<CardInput>
         CardNumberFormatter()
       ],
       placeholder: '0000 0000 0000 0000',
+      suffix: _getCardIcon(),
       maxLength: 23,
       onChanged: _onChanged,
+      decoration: const BoxDecoration(border: Border()),
     );
   }
 

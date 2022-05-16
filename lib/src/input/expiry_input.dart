@@ -56,6 +56,7 @@ class _ExpiryInputState extends State<ExpiryInput>
         inputFormatters: [
           ExpiryFormatter(),
         ],
+        decoration: const BoxDecoration(border: Border()),
         onChanged: _onChanged);
   }
 
