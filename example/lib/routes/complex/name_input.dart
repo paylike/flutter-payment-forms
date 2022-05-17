@@ -2,8 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:paylike_sdk/paylike_sdk.dart';
 
-import '../stylable.dart';
-
 /// Describes information in the name input field
 class _Name {
   String firstName = '';

@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:paylike_sdk/paylike_sdk.dart';
 import 'package:overlay_support/overlay_support.dart';
 
+import 'routes/paylike_style_example.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -70,7 +72,9 @@ class _MyAppState extends State<MyApp> {
       '/example/complex': (context) => ComplexWhiteLabelExample(
           engine: widget._engine, currencies: widget._currencies, style: style),
       '/example/error-localisation': (context) => ErrorLocalisationExample(
-          engine: widget._engine, currencies: widget._currencies, style: style)
+          engine: widget._engine, currencies: widget._currencies, style: style),
+      '/example/paylike-style': (context) => PaylikeStyleExample(
+          engine: widget._engine, currencies: widget._currencies, style: style),
     };
     if (style == PaylikeWidgetStyles.cupertino) {
       return OverlaySupport.global(

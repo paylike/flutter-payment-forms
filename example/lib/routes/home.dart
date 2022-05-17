@@ -119,6 +119,16 @@ class HomeScreen extends StatelessWidget {
             AvailabilityPlatforms.android
           ],
           onPressed: _navigateTo(context, '/example/complex'),
+        ),
+        HomeItem(
+          title: 'Paylike style Pay widget example',
+          description:
+              'A custom made widget with Paylike styling to ensure customer trust',
+          platforms: const [
+            AvailabilityPlatforms.ios,
+            AvailabilityPlatforms.android
+          ],
+          onPressed: _navigateTo(context, '/example/paylike-style'),
         )
       ],
     )));

@@ -25,10 +25,14 @@ class ComplexWhiteLabelWidget extends WhiteLabelWidget {
   final List<PaylikeExtensionInputWidget> extensions;
 
   @override
-  State<StatefulWidget> createState() => _ComplexWhiteLabelWidgetState();
+  State<StatefulWidget> createState() => ComplexWhiteLabelWidgetState();
 }
 
-class _ComplexWhiteLabelWidgetState extends WhiteLabelWidgetState {
+/// State of the widget
+///
+/// Extend this state if you wanna override the build function and keep the rest
+/// of the functionality in place
+class ComplexWhiteLabelWidgetState extends WhiteLabelWidgetState {
   @override
   Widget build(BuildContext context) {
     var _widget = widget as ComplexWhiteLabelWidget;
