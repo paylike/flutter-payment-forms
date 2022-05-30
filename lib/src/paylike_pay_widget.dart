@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pay/pay.dart';
-import 'package:paylike_flutter_engine/domain.dart';
 import 'package:paylike_sdk/paylike_sdk.dart';
 
 /// Made to be styled with Paylike style out of the box to increase customer trust
@@ -40,7 +39,7 @@ class PaylikePayWidget extends ComplexWhiteLabelWidget {
   State<StatefulWidget> createState() => _PaylikePayWidgetState();
 }
 
-class _PaylikePayWidgetState extends ComplexWhiteLabelWidgetState {
+class _PaylikePayWidgetState extends PaylikeFormWidgetState<PaylikePayWidget> {
   void _animationTriggerListener() {
     if (widget.engine.current == EngineState.done) {
       setState(() {
@@ -115,9 +114,8 @@ class _PaylikePayWidgetState extends ComplexWhiteLabelWidgetState {
 
   @override
   Widget build(BuildContext context) {
-    var _widget = widget as PaylikePayWidget;
-    if (_widget.extensions.isNotEmpty) {
-      _widget.extensions.sort((a, b) => a.order.compareTo(b.order));
+    if (widget.extensions.isNotEmpty) {
+      widget.extensions.sort((a, b) => a.order.compareTo(b.order));
     }
 
     return Column(children: [
@@ -146,7 +144,7 @@ class _PaylikePayWidgetState extends ComplexWhiteLabelWidgetState {
                           top: _animationCheckMarkTopPosition,
                           left: 1,
                           duration: const Duration(milliseconds: 500),
-                          onEnd: () => _widget.onPaymentDone?.call(),
+                          onEnd: () => widget.onPaymentDone?.call(),
                         ),
                         const Icon(Icons.circle_outlined, color: Colors.white)
                       ],
@@ -157,7 +155,7 @@ class _PaylikePayWidgetState extends ComplexWhiteLabelWidgetState {
                             end: Alignment.topRight,
                             transform:
                                 const GradientRotation(pi / 1.090909090909),
-                            colors: _widget.buttonColors)))),
+                            colors: widget.buttonColors)))),
           ),
           AnimatedOpacity(
               opacity: 1 - _animationOpacity,
@@ -166,11 +164,11 @@ class _PaylikePayWidgetState extends ComplexWhiteLabelWidgetState {
                   key: formKey,
                   child: Column(
                     children: [
-                      ..._widget.extensions.where((e) => e.order < 0),
+                      ...widget.extensions.where((e) => e.order < 0),
                       webview(),
-                      ..._widget.extensions.where((e) => e.order == 0),
+                      ...widget.extensions.where((e) => e.order == 0),
                       ...inputFields(),
-                      ..._widget.extensions.where((e) => e.order == 1),
+                      ...widget.extensions.where((e) => e.order == 1),
                       formError(),
                       ...animatedButtons(context),
                     ],

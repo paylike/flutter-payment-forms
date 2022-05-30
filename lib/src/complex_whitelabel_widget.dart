@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:paylike_flutter_engine/domain.dart';
 import 'package:paylike_sdk/paylike_sdk.dart';
 
 /// Made to be extandable with additonal fields compared to [WhiteLabelWidget]
 class ComplexWhiteLabelWidget extends WhiteLabelWidget {
   /// For more informations about options check also [WhiteLabelWidget]
-  ///
   const ComplexWhiteLabelWidget(
       {Key? key,
       required PaylikeEngine engine,
@@ -26,40 +24,39 @@ class ComplexWhiteLabelWidget extends WhiteLabelWidget {
   final List<PaylikeExtensionInputWidget> extensions;
 
   @override
-  State<StatefulWidget> createState() => ComplexWhiteLabelWidgetState();
+  State<StatefulWidget> createState() => _ComplexWhiteLabelWidgetState();
 }
 
 /// State of the widget
 ///
 /// Extend this state if you wanna override the build function and keep the rest
 /// of the functionality in place
-class ComplexWhiteLabelWidgetState extends WhiteLabelWidgetState {
+class _ComplexWhiteLabelWidgetState
+    extends PaylikeFormWidgetState<ComplexWhiteLabelWidget> {
   @override
   Widget build(BuildContext context) {
-    var _widget = widget as ComplexWhiteLabelWidget;
-    _widget.extensions.sort((a, b) => a.order.compareTo(b.order));
+    widget.extensions.sort((a, b) => a.order.compareTo(b.order));
     return Form(
         key: formKey,
         child: Column(
           children: [
-            ..._widget.extensions.where((e) => e.order < 0),
+            ...widget.extensions.where((e) => e.order < 0),
             webview(),
-            ..._widget.extensions.where((e) => e.order == 0),
+            ...widget.extensions.where((e) => e.order == 0),
             ...inputFields(),
-            ..._widget.extensions.where((e) => e.order == 1),
+            ...widget.extensions.where((e) => e.order == 1),
             formError(),
             ...payButtons(context),
-            ..._widget.extensions.where((e) => e.order > 1),
+            ...widget.extensions.where((e) => e.order > 1),
           ],
         ));
   }
 
   /// Fiels the custom fields with the custom data from the extension widgets
   void _fillCustomFields() {
-    var _widget = widget as ComplexWhiteLabelWidget;
-    _widget.options.custom = {
-      ..._widget.options.custom,
-      ..._widget.extensions
+    widget.options.custom = {
+      ...widget.options.custom,
+      ...widget.extensions
           .fold({}, (cur, e) => {...cur, ...e.repository.toJson()}),
     };
   }
@@ -78,14 +75,13 @@ class ComplexWhiteLabelWidgetState extends WhiteLabelWidgetState {
 
   @override
   bool inputsValid() {
-    var _widget = widget as ComplexWhiteLabelWidget;
-    for (var extension in _widget.extensions) {
+    for (var extension in widget.extensions) {
       extension.service.change(extension.repository.isValid()
           ? InputStates.valid
           : InputStates.invalid);
     }
     var extensionValid =
-        _widget.extensions.every((w) => w.service.current == InputStates.valid);
+        widget.extensions.every((w) => w.service.current == InputStates.valid);
     var builtInValid = super.inputsValid();
     return extensionValid && builtInValid;
   }

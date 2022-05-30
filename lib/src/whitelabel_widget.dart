@@ -54,85 +54,111 @@ class WhiteLabelWidget extends StatefulWidget {
       this.style = PaylikeWidgetStyles.material})
       : super(key: key);
   @override
-  State<StatefulWidget> createState() => WhiteLabelWidgetState();
+  State<StatefulWidget> createState() => _WhiteLabelWidgetState();
 }
 
-class WhiteLabelWidgetState extends State<WhiteLabelWidget> {
+/// Describe the ancestor state for the payment forms widget
+///
+/// Take a look at [ComplexWhiteLabelWidget] to see how to use this state as an ancestor
+class PaylikeFormWidgetState<T extends WhiteLabelWidget> extends State<T> {
+  final SingleRepository<PaylikeFormsError> errorMessageRepository =
+      SingleRepository(validator: (e) => true);
+
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  /// Card number
+
+  final SingleRepository<String> cardNumberRepository =
+      SingleRepository(validator: CardNumberValidator.isValid);
+  final InputDisplayService cardService = InputDisplayService();
+
+  /// Expiry
+
+  final ExpiryRepository expiryRepository =
+      ExpiryRepository(validator: ExpiryValidator.isValid);
+  final InputDisplayService expiryService = InputDisplayService();
+
+  /// CVC
+
+  final SingleRepository<String> cvcRepository =
+      SingleRepository(validator: CVCValidator.isValid);
+  final InputDisplayService cvcService = InputDisplayService();
+
   /// Listens to engine events and updates the widget if anything happens
-  void _engineListener() {
+  void engineListener() {
     setState(() {
       if (widget.engine.current == EngineState.errorHappened) {
-        _errorMessageRepository.set(PaylikeFormsError(
+        errorMessageRepository.set(PaylikeFormsError(
             engineError: widget.engine.error as PaylikeEngineError));
         return;
       }
-      _errorMessageRepository.reset();
+      errorMessageRepository.reset();
     });
+  }
+
+  Future<void> errorHandler(Function() fn) async {
+    try {
+      await fn();
+    } on PaylikeException catch (e) {
+      errorMessageRepository.set(PaylikeFormsError(apiException: e));
+      setState(() {});
+    } on PaylikeEngineError catch (e) {
+      errorMessageRepository.set(PaylikeFormsError(engineError: e));
+      setState(() {});
+    } on Exception catch (e) {
+      errorMessageRepository.set(PaylikeFormsError(exception: e));
+      setState(() {});
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    widget.engine.addListener(_engineListener);
+    widget.engine.addListener(engineListener);
   }
 
   @override
   void dispose() {
     super.dispose();
-    widget.engine.removeListener(_engineListener);
-  }
-
-  Future<void> _errorHandler(Function() fn) async {
-    try {
-      await fn();
-    } on PaylikeException catch (e) {
-      _errorMessageRepository.set(PaylikeFormsError(apiException: e));
-      setState(() {});
-    } on PaylikeEngineError catch (e) {
-      _errorMessageRepository.set(PaylikeFormsError(engineError: e));
-      setState(() {});
-    } on Exception catch (e) {
-      _errorMessageRepository.set(PaylikeFormsError(exception: e));
-      setState(() {});
-    }
-  }
-
-  /// Validates input fields
-  bool inputsValid() {
-    _cvcService.change(
-        _cvcRepository.isValid() ? InputStates.valid : InputStates.invalid);
-    _expiryService.change(
-        _expiryRepository.isValid() ? InputStates.valid : InputStates.invalid);
-    _cardService.change(_cardNumberRepository.isValid()
-        ? InputStates.valid
-        : InputStates.invalid);
-    return ([_cvcService, _expiryService, _cardService]
-        .every((e) => e.current == InputStates.valid));
+    widget.engine.removeListener(engineListener);
   }
 
   /// Executes a card payment based on the input information
   void executeCardPayment() async {
-    await _errorHandler(() async {
+    await errorHandler(() async {
       if (!inputsValid()) {
         throw Exception('Invalid input information. Please try again.');
       }
-      var number = _cardNumberRepository.item.replaceAll(" ", "");
-      var cvc = _cvcRepository.item;
+      var number = cardNumberRepository.item.replaceAll(" ", "");
+      var cvc = cvcRepository.item;
       var tokenized = await widget.engine.tokenize(number, cvc);
       await widget.engine.createPayment(
           CardPayment.fromBasePayment(
               PaylikeCard(
                 details: tokenized,
-                expiry: _expiryRepository.parse,
+                expiry: expiryRepository.parse,
               ),
               widget.options),
           testConfig: widget.testConfig);
     });
   }
 
+  /// Validates input fields
+  bool inputsValid() {
+    cvcService.change(
+        cvcRepository.isValid() ? InputStates.valid : InputStates.invalid);
+    expiryService.change(
+        expiryRepository.isValid() ? InputStates.valid : InputStates.invalid);
+    cardService.change(cardNumberRepository.isValid()
+        ? InputStates.valid
+        : InputStates.invalid);
+    return ([cvcService, expiryService, cardService]
+        .every((e) => e.current == InputStates.valid));
+  }
+
   /// Executes an Apple Pay payment
   void executeApplePayPayment(Map<String, dynamic> result) async {
-    await _errorHandler(() async {
+    await errorHandler(() async {
       var token = result['token'];
       var tokenized = await widget.engine.tokenizeAppleToken(token);
       await widget.engine.createPaymentWithApple(
@@ -140,31 +166,6 @@ class WhiteLabelWidgetState extends State<WhiteLabelWidget> {
           testConfig: widget.testConfig);
     });
   }
-
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-  /// Card number
-
-  final SingleRepository<String> _cardNumberRepository =
-      SingleRepository(validator: CardNumberValidator.isValid);
-  final InputDisplayService _cardService = InputDisplayService();
-
-  /// Expiry
-
-  final ExpiryRepository _expiryRepository =
-      ExpiryRepository(validator: ExpiryValidator.isValid);
-  final InputDisplayService _expiryService = InputDisplayService();
-
-  /// CVC
-
-  final SingleRepository<String> _cvcRepository =
-      SingleRepository(validator: CVCValidator.isValid);
-  final InputDisplayService _cvcService = InputDisplayService();
-
-  /// Errors
-
-  final SingleRepository<PaylikeFormsError> _errorMessageRepository =
-      SingleRepository(validator: (e) => true);
 
   /// Webview widget provided by [PaylikeEngineWidget]
   @nonVirtual
@@ -179,21 +180,21 @@ class WhiteLabelWidgetState extends State<WhiteLabelWidget> {
   List<Widget> inputFields() {
     return [
       CardInput(
-          repository: _cardNumberRepository,
-          service: _cardService,
+          repository: cardNumberRepository,
+          service: cardService,
           style: widget.style),
       Row(
         children: [
           Expanded(
               child: ExpiryInput(
-                  repository: _expiryRepository,
-                  service: _expiryService,
+                  repository: expiryRepository,
+                  service: expiryService,
                   style: widget.style)),
           const Spacer(),
           Expanded(
               child: CVCInput(
-                  repository: _cvcRepository,
-                  service: _cvcService,
+                  repository: cvcRepository,
+                  service: cvcService,
                   style: widget.style)),
         ],
       )
@@ -204,9 +205,9 @@ class WhiteLabelWidgetState extends State<WhiteLabelWidget> {
   @nonVirtual
   Widget formError() {
     return WhitelabelErrorWidget(
-        isVisible: _errorMessageRepository.isAvailable,
-        message: _errorMessageRepository.isAvailable
-            ? _errorMessageRepository.item.displayMessage
+        isVisible: errorMessageRepository.isAvailable,
+        message: errorMessageRepository.isAvailable
+            ? errorMessageRepository.item.displayMessage
             : '');
   }
 
@@ -262,6 +263,13 @@ class WhiteLabelWidgetState extends State<WhiteLabelWidget> {
     ];
   }
 
+  @override
+  Widget build(BuildContext context) {
+    throw UnimplementedError();
+  }
+}
+
+class _WhiteLabelWidgetState extends PaylikeFormWidgetState {
   @override
   Widget build(BuildContext context) {
     return Form(
