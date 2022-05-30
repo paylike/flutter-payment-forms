@@ -3,6 +3,8 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pay/pay.dart';
+import 'package:paylike_flutter_engine/domain.dart';
 import 'package:paylike_sdk/paylike_sdk.dart';
 
 /// Made to be styled with Paylike style out of the box to increase customer trust

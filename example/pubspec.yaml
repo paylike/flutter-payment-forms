@@ -39,8 +39,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  paylike_flutter_engine:
-    path: ../../flutter-engine
   paylike_sdk:
     path: ../
 

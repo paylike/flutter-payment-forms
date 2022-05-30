@@ -1,5 +1,7 @@
 import 'package:paylike_sdk/paylike_sdk.dart';
 
+import 'package:paylike_flutter_engine/exception.dart';
+
 /// Describes an error used to store and display information about
 /// an exception in the system
 ///

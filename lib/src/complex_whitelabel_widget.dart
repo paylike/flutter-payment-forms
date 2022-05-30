@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paylike_flutter_engine/domain.dart';
 import 'package:paylike_sdk/paylike_sdk.dart';
 
 /// Made to be extandable with additonal fields compared to [WhiteLabelWidget]
@@ -56,7 +57,7 @@ class ComplexWhiteLabelWidgetState extends WhiteLabelWidgetState {
   /// Fiels the custom fields with the custom data from the extension widgets
   void _fillCustomFields() {
     var _widget = widget as ComplexWhiteLabelWidget;
-    widget.options.custom = {
+    _widget.options.custom = {
       ..._widget.options.custom,
       ..._widget.extensions
           .fold({}, (cur, e) => {...cur, ...e.repository.toJson()}),

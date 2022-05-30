@@ -15,6 +15,10 @@ If you are looking for our low level library supporting executing payments throu
 
 ## WhiteLabelWidget
 
+WhitelabelWidget provides the most minimalistic way to implement a payment form.
+
+
+
 ## ComplexWhiteLabelWidget
 
 ## PaylikePayWidget

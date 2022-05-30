@@ -12,8 +12,7 @@ dependencies:
     sdk: flutter
   flutter_svg: ^1.0.3
   pay: ^1.0.8
-  paylike_flutter_engine:
-    path: '../flutter-engine'
+  paylike_flutter_engine: ^0.1.0
   paylike_luhn: ^2.0.0
 
 dev_dependencies:

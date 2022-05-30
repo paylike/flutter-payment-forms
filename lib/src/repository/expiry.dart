@@ -1,4 +1,4 @@
-import 'package:paylike_flutter_engine/paylike_flutter_engine.dart';
+import 'package:paylike_flutter_engine/domain.dart';
 import 'package:paylike_sdk/src/repository/single.dart';
 
 /// Defines a repository responsible for the expiry field

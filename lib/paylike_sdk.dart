@@ -12,3 +12,4 @@ export 'src/repository/single.dart';
 export 'src/repository/single_custom.dart';
 export 'src/styling/styles.dart';
 export 'src/paylike_pay_widget.dart';
+export 'package:paylike_flutter_engine/domain.dart';
