@@ -27,20 +27,23 @@ class HomeItem extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return ExpansionTile(title: Text(title), children: [
-      Row(children: const [
-        Text('Description',
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))
-      ]),
-      Text(description),
-      const SizedBox(height: 20),
-      Availability(platforms: platforms),
-      const SizedBox(height: 20),
-      ElevatedButton(
-        onPressed: onPressed,
-        child: const Text('See example'),
-      ),
-    ]);
+    return ExpansionTile(
+        title: Text(title),
+        childrenPadding: const EdgeInsets.only(left: 20, right: 20),
+        children: [
+          Row(children: const [
+            Text('Description',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))
+          ]),
+          Text(description),
+          const SizedBox(height: 20),
+          Availability(platforms: platforms),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: onPressed,
+            child: const Text('See example'),
+          ),
+        ]);
   }
 }
 
@@ -69,18 +72,18 @@ class HomeScreen extends StatelessWidget {
   }
 
   /// Renders the theme change button according to style
-  Widget themeChangerButton() {
-    if (style == PaylikeWidgetStyles.material) {
-      return Center(
-          child: ElevatedButton(
-        child: const Text('Switch theme'),
-        onPressed: changeTheme,
-      ));
-    }
-    return Center(
-      child: CupertinoButton(
-          child: const Text('Switch theme'), onPressed: changeTheme),
-    );
+  Widget themeChangerButton(BuildContext context) {
+    return Row(children: [
+      const Text('Material'),
+      style == PaylikeWidgetStyles.material
+          ? Switch(
+              onChanged: (_) => changeTheme(),
+              value: false,
+              inactiveTrackColor: Theme.of(context).colorScheme.primary,
+            )
+          : CupertinoSwitch(onChanged: (_) => changeTheme(), value: true),
+      const Text('Cupertino'),
+    ], mainAxisAlignment: MainAxisAlignment.center);
   }
 
   @override
@@ -90,7 +93,7 @@ class HomeScreen extends StatelessWidget {
             child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        themeChangerButton(),
+        themeChangerButton(context),
         HomeItem(
           title: 'Simple white label example',
           description:
@@ -103,7 +106,8 @@ class HomeScreen extends StatelessWidget {
         ),
         HomeItem(
           title: 'Error & localisation example',
-          description: 'Examples of different error scenarios and languages',
+          description:
+              'Examples of different error scenarios and languages to showcase the most common error scenarios your application can encounter and how can we support you with localising these issues.',
           platforms: const [
             AvailabilityPlatforms.ios,
             AvailabilityPlatforms.android

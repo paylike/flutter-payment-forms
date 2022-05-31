@@ -14,7 +14,8 @@ class Availability extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-      const Text('Available on:'),
+      const Text('Available on:',
+          style: TextStyle(fontWeight: FontWeight.w700)),
       ...platforms.map((platform) {
         switch (platform) {
           case AvailabilityPlatforms.ios:
