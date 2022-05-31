@@ -27,7 +27,7 @@ class MinimalWhitelabelExample extends StatelessWidget {
       children: [
         Container(
             margin: const EdgeInsets.all(10),
-            child: WhiteLabelWidget(
+            child: PaylikeWhiteLabelWidget(
               style: style,
               engine: engine,
               options: BasePayment(

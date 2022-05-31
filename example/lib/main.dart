@@ -1,4 +1,4 @@
-import 'package:example/routes/complex_example.dart';
+import 'package:example/routes/extandable_example.dart';
 import 'package:example/routes/error_localisation_example.dart';
 import 'package:example/routes/home.dart';
 import 'package:example/routes/minimal_example.dart';
@@ -69,7 +69,7 @@ class _MyAppState extends State<MyApp> {
           engine: widget._engine, changeTheme: _changeTheme, style: style),
       '/example/minimal': (context) => MinimalWhitelabelExample(
           engine: widget._engine, currencies: widget._currencies, style: style),
-      '/example/complex': (context) => ComplexWhiteLabelExample(
+      '/example/extendable': (context) => ExtendableWhiteLabelExample(
           engine: widget._engine, currencies: widget._currencies, style: style),
       '/example/error-localisation': (context) => ErrorLocalisationExample(
           engine: widget._engine, currencies: widget._currencies, style: style),

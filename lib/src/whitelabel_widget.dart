@@ -26,7 +26,7 @@ import 'styling/styles.dart';
 
 /// The most simple widget of the package built for providing
 /// a simple card, expiry and cvc code field, optionally a pay button as well
-class WhiteLabelWidget extends StatefulWidget {
+class PaylikeWhiteLabelWidget extends StatefulWidget {
   /// Required for completing a payment flow
   final PaylikeEngine engine;
 
@@ -46,7 +46,7 @@ class WhiteLabelWidget extends StatefulWidget {
   /// which describes to Apple Pay your payment. More information TODO
   final String paymentConfigName;
 
-  const WhiteLabelWidget(
+  const PaylikeWhiteLabelWidget(
       {Key? key,
       required this.engine,
       required this.options,
@@ -60,8 +60,9 @@ class WhiteLabelWidget extends StatefulWidget {
 
 /// Describe the ancestor state for the payment forms widget
 ///
-/// Take a look at [ComplexWhiteLabelWidget] to see how to use this state as an ancestor
-class PaylikeFormWidgetState<T extends WhiteLabelWidget> extends State<T> {
+/// Take a look at [PaylikeExtendableWhiteLabelWidget] to see how to use this state as an ancestor
+class PaylikeFormWidgetState<T extends PaylikeWhiteLabelWidget>
+    extends State<T> {
   final SingleRepository<PaylikeFormsError> errorMessageRepository =
       SingleRepository(validator: (e) => true);
 

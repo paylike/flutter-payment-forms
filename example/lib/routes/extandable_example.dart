@@ -6,7 +6,7 @@ import 'package:paylike_sdk/paylike_sdk.dart';
 import 'complex/note_input.dart';
 
 /// Shows off the minimal functionality of the white label component
-class ComplexWhiteLabelExample extends StatelessWidget {
+class ExtendableWhiteLabelExample extends StatelessWidget {
   /// Engine for the example
   final PaylikeEngine engine;
 
@@ -15,7 +15,7 @@ class ComplexWhiteLabelExample extends StatelessWidget {
 
   /// Describes the style of the example
   final PaylikeWidgetStyles style;
-  const ComplexWhiteLabelExample(
+  const ExtendableWhiteLabelExample(
       {Key? key,
       required this.engine,
       required this.currencies,
@@ -30,7 +30,7 @@ class ComplexWhiteLabelExample extends StatelessWidget {
       children: [
         Container(
             margin: const EdgeInsets.all(10),
-            child: ComplexWhiteLabelWidget(
+            child: PaylikeExtendableWhiteLabelWidget(
               style: style,
               engine: engine,
               options: BasePayment(

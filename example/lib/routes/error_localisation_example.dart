@@ -38,7 +38,7 @@ class _ErrorLocalisationExampleState extends State<ErrorLocalisationExample> {
       children: [
         Container(
             margin: const EdgeInsets.all(10),
-            child: ComplexWhiteLabelWidget(
+            child: PaylikeExtendableWhiteLabelWidget(
               style: widget.style,
               engine: widget.engine,
               options: BasePayment(

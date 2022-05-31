@@ -92,9 +92,9 @@ class HomeScreen extends StatelessWidget {
       children: [
         themeChangerButton(),
         HomeItem(
-          title: 'Simple whitelabel example',
+          title: 'Simple white label example',
           description:
-              'Example to showcase the most simple functionality of our whitelabel widget',
+              'Example to showcase the most simple functionality of our white label widget. You can only customize the colors of this widget by setting the colorSchema of the theme. This is the quickest way to integrate payments.',
           platforms: const [
             AvailabilityPlatforms.ios,
             AvailabilityPlatforms.android
@@ -111,19 +111,19 @@ class HomeScreen extends StatelessWidget {
           onPressed: _navigateTo(context, '/example/error-localisation'),
         ),
         HomeItem(
-          title: 'Complex whitelabel example',
+          title: 'Extendable white label example',
           description:
-              'Example to showcase the capabilities of our form builder',
+              'Example to showcase the capabilities of our PaylikeExtendableWhitelabelWidget that provides you with the possibility to add your own extensions to the widget. An easy way to add more input fields and customise those fields in your payment forms.',
           platforms: const [
             AvailabilityPlatforms.ios,
             AvailabilityPlatforms.android
           ],
-          onPressed: _navigateTo(context, '/example/complex'),
+          onPressed: _navigateTo(context, '/example/extendable'),
         ),
         HomeItem(
-          title: 'Paylike style Pay widget example',
+          title: 'Paylike style pay widget example',
           description:
-              'A custom made widget with Paylike styling to ensure customer trust',
+              'A custom made widget with Paylike styling to boost customer trust in your application\'s payment flow. While other widgets can be customised in terms of layout and color, this widget is consistent with the Paylike style.',
           platforms: const [
             AvailabilityPlatforms.ios,
             AvailabilityPlatforms.android

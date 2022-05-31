@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:paylike_sdk/paylike_sdk.dart';
 
-/// Made to be extandable with additonal fields compared to [WhiteLabelWidget]
-class ComplexWhiteLabelWidget extends WhiteLabelWidget {
-  /// For more informations about options check also [WhiteLabelWidget]
-  const ComplexWhiteLabelWidget(
+/// Made to be extandable with additonal fields compared to [PaylikeWhiteLabelWidget]
+class PaylikeExtendableWhiteLabelWidget extends PaylikeWhiteLabelWidget {
+  /// For more informations about options check also [PaylikeWhiteLabelWidget]
+  const PaylikeExtendableWhiteLabelWidget(
       {Key? key,
       required PaylikeEngine engine,
       required BasePayment options,
@@ -24,15 +24,15 @@ class ComplexWhiteLabelWidget extends WhiteLabelWidget {
   final List<PaylikeExtensionInputWidget> extensions;
 
   @override
-  State<StatefulWidget> createState() => _ComplexWhiteLabelWidgetState();
+  State<StatefulWidget> createState() => _ExtendableWhiteLabelWidgetState();
 }
 
-/// State of the widget
+/// State of [PaylikeExtendableWhiteLabelWidget]
 ///
-/// Extend this state if you wanna override the build function and keep the rest
-/// of the functionality in place
-class _ComplexWhiteLabelWidgetState
-    extends PaylikeFormWidgetState<ComplexWhiteLabelWidget> {
+/// Provides an override for [inputsValid], [executeCardPayment], [executeApplePayPayment] to
+/// incorporate additional extension inputs as well
+class _ExtendableWhiteLabelWidgetState
+    extends PaylikeFormWidgetState<PaylikeExtendableWhiteLabelWidget> {
   @override
   Widget build(BuildContext context) {
     widget.extensions.sort((a, b) => a.order.compareTo(b.order));
@@ -52,7 +52,7 @@ class _ComplexWhiteLabelWidgetState
         ));
   }
 
-  /// Fiels the custom fields with the custom data from the extension widgets
+  /// Fills the custom fields with the custom data from the extension widgets
   void _fillCustomFields() {
     widget.options.custom = {
       ...widget.options.custom,

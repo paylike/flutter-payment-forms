@@ -8,7 +8,7 @@ import 'package:pay/pay.dart';
 import 'package:paylike_sdk/paylike_sdk.dart';
 
 /// Made to be styled with Paylike style out of the box to increase customer trust
-class PaylikePayWidget extends ComplexWhiteLabelWidget {
+class PaylikePayWidget extends PaylikeExtendableWhiteLabelWidget {
   final buttonColors = [
     const Color(0xFF0F754B),
     const Color(0xFF459A42),

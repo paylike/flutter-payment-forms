@@ -3,8 +3,8 @@ This is the high level SDK we provide for using the Paylike ecosystem with views
 
 ## Table of contents
 * [Library navigator](#library-navigator)
-* [WhiteLabel widget](#whitelabelwidget)
-* [Extendable WhiteLabel widget](#complexwhitelabelwidget)
+* [Paylike white label widget](#paylikewhitelabelwidget)
+* [Extendable white label widget](#paylikeextendablewhitelabelwidget)
 * [Paylike styled pay widget](#paylikepaywidget)
 
 ## Library navigator
@@ -13,12 +13,12 @@ This library was created to provide the simpliest way of integrating Paylike int
 
 If you are looking for our low level library supporting executing payments through our API, you are looking for our [Engine](https://github.com/paylike/flutter-engine) which is responsible for making the API integration including the webview required to execute TDS challenges
 
-## WhiteLabelWidget
+## PaylikeWhiteLabelWidget
 
 WhitelabelWidget provides the most minimalistic way to implement a payment form.
 
 
 
-## ComplexWhiteLabelWidget
+## PaylikeExtendableWhiteLabelWidget
 
 ## PaylikePayWidget
