@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pay/pay.dart';
 import 'package:paylike_sdk/paylike_sdk.dart';
 
@@ -63,6 +64,9 @@ class _PaylikePayWidgetState extends PaylikeFormWidgetState<PaylikePayWidget> {
   double _animationCheckMarkTopPosition = -100;
   double _animationOpacity = 0;
   List<Widget> animatedButtons(BuildContext context) {
+    if (isLoading) {
+      return const [SpinKitDualRing(color: Color(0xFF2B8742))];
+    }
     Widget payButton = ElevatedButton(
         onPressed: () => executeCardPayment(),
         child: Text(PaylikeLocalizator.getKey('PAY')));

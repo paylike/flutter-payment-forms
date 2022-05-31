@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pay/pay.dart';
 import 'package:paylike_flutter_engine/domain.dart';
 import 'package:paylike_flutter_engine/exception.dart';
@@ -84,15 +85,23 @@ class PaylikeFormWidgetState<T extends WhiteLabelWidget> extends State<T> {
       SingleRepository(validator: CVCValidator.isValid);
   final InputDisplayService cvcService = InputDisplayService();
 
+  bool isLoading = false;
+
   /// Listens to engine events and updates the widget if anything happens
   void engineListener() {
     setState(() {
       if (widget.engine.current == EngineState.errorHappened) {
         errorMessageRepository.set(PaylikeFormsError(
             engineError: widget.engine.error as PaylikeEngineError));
+        isLoading = false;
         return;
       }
       errorMessageRepository.reset();
+      if (widget.engine.current == EngineState.done) {
+        isLoading = false;
+        return;
+      }
+      isLoading = widget.engine.current != EngineState.waitingForInput;
     });
   }
 
@@ -123,8 +132,23 @@ class PaylikeFormWidgetState<T extends WhiteLabelWidget> extends State<T> {
     widget.engine.removeListener(engineListener);
   }
 
+  /// Validates input fields
+  bool inputsValid() {
+    cvcService.change(
+        cvcRepository.isValid() ? InputStates.valid : InputStates.invalid);
+    expiryService.change(
+        expiryRepository.isValid() ? InputStates.valid : InputStates.invalid);
+    cardService.change(cardNumberRepository.isValid()
+        ? InputStates.valid
+        : InputStates.invalid);
+    return ([cvcService, expiryService, cardService]
+        .every((e) => e.current == InputStates.valid));
+  }
+
   /// Executes a card payment based on the input information
   void executeCardPayment() async {
+    if (isLoading) return;
+    setState(() => isLoading = true);
     await errorHandler(() async {
       if (!inputsValid()) {
         throw Exception('Invalid input information. Please try again.');
@@ -143,21 +167,10 @@ class PaylikeFormWidgetState<T extends WhiteLabelWidget> extends State<T> {
     });
   }
 
-  /// Validates input fields
-  bool inputsValid() {
-    cvcService.change(
-        cvcRepository.isValid() ? InputStates.valid : InputStates.invalid);
-    expiryService.change(
-        expiryRepository.isValid() ? InputStates.valid : InputStates.invalid);
-    cardService.change(cardNumberRepository.isValid()
-        ? InputStates.valid
-        : InputStates.invalid);
-    return ([cvcService, expiryService, cardService]
-        .every((e) => e.current == InputStates.valid));
-  }
-
   /// Executes an Apple Pay payment
   void executeApplePayPayment(Map<String, dynamic> result) async {
+    if (isLoading) return;
+    setState(() => isLoading = true);
     await errorHandler(() async {
       var token = result['token'];
       var tokenized = await widget.engine.tokenizeAppleToken(token);
@@ -211,9 +224,22 @@ class PaylikeFormWidgetState<T extends WhiteLabelWidget> extends State<T> {
             : '');
   }
 
+  /// Loading indicator based on widget style
+  @nonVirtual
+  Widget loadingIndicator(BuildContext context) {
+    if (widget.style == PaylikeWidgetStyles.material) {
+      return SpinKitDualRing(color: Theme.of(context).colorScheme.primary);
+    } else {
+      return SpinKitDualRing(color: CupertinoTheme.of(context).primaryColor);
+    }
+  }
+
   /// Card pay and apple pay button
   @nonVirtual
   List<Widget> payButtons(BuildContext context) {
+    if (isLoading) {
+      return [loadingIndicator(context)];
+    }
     Widget payButton = ElevatedButton(
         onPressed: () => executeCardPayment(),
         child: Text(PaylikeLocalizator.getKey('PAY')));
