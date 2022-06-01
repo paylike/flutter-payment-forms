@@ -15,6 +15,9 @@ class HomeItem extends StatelessWidget {
   /// Platforms that the component available on
   final List<AvailabilityPlatforms> platforms;
 
+  /// Style of the item
+  final PaylikeWidgetStyles style;
+
   /// Called when the example button is pressed
   final void Function() onPressed;
 
@@ -24,6 +27,7 @@ class HomeItem extends StatelessWidget {
     required this.description,
     required this.platforms,
     required this.onPressed,
+    required this.style,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -39,10 +43,15 @@ class HomeItem extends StatelessWidget {
           const SizedBox(height: 20),
           Availability(platforms: platforms),
           const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: onPressed,
-            child: const Text('See example'),
-          ),
+          style == PaylikeWidgetStyles.material
+              ? ElevatedButton(
+                  child: const Text('See example'),
+                  onPressed: onPressed,
+                )
+              : CupertinoButton(
+                  child: const Text('See example'),
+                  onPressed: onPressed,
+                ),
         ]);
   }
 }
@@ -95,6 +104,7 @@ class HomeScreen extends StatelessWidget {
       children: [
         themeChangerButton(context),
         HomeItem(
+          style: style,
           title: 'Simple white label example',
           description:
               'Example to showcase the most simple functionality of our white label widget. You can only customize the colors of this widget by setting the colorSchema of the theme. This is the quickest way to integrate payments.',
@@ -105,6 +115,7 @@ class HomeScreen extends StatelessWidget {
           onPressed: _navigateTo(context, '/example/minimal'),
         ),
         HomeItem(
+          style: style,
           title: 'Error & localisation example',
           description:
               'Examples of different error scenarios and languages to showcase the most common error scenarios your application can encounter and how can we support you with localising these issues.',
@@ -115,6 +126,7 @@ class HomeScreen extends StatelessWidget {
           onPressed: _navigateTo(context, '/example/error-localisation'),
         ),
         HomeItem(
+          style: style,
           title: 'Extendable white label example',
           description:
               'Example to showcase the capabilities of our PaylikeExtendableWhitelabelWidget that provides you with the possibility to add your own extensions to the widget. An easy way to add more input fields and customise those fields in your payment forms.',
@@ -125,6 +137,7 @@ class HomeScreen extends StatelessWidget {
           onPressed: _navigateTo(context, '/example/extendable'),
         ),
         HomeItem(
+          style: style,
           title: 'Paylike style pay widget example',
           description:
               'A custom made widget with Paylike styling to boost customer trust in your application\'s payment flow. While other widgets can be customised in terms of layout and color, this widget is consistent with the Paylike style.',
@@ -135,6 +148,7 @@ class HomeScreen extends StatelessWidget {
           onPressed: _navigateTo(context, '/example/paylike-style'),
         ),
         HomeItem(
+          style: style,
           title: 'Override white label widget example',
           description:
               'Showcases how you can completely customise the payment form and extend with your own custom logic based on the original implementation.',
