@@ -1,12 +1,13 @@
-import 'package:example/routes/extandable_example.dart';
-import 'package:example/routes/error_localisation_example.dart';
-import 'package:example/routes/home.dart';
-import 'package:example/routes/minimal_example.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:paylike_sdk/paylike_sdk.dart';
 import 'package:overlay_support/overlay_support.dart';
 
+import 'routes/extandable_example.dart';
+import 'routes/error_localisation_example.dart';
+import 'routes/home.dart';
+import 'routes/minimal_example.dart';
+import 'routes/override_example.dart';
 import 'routes/paylike_style_example.dart';
 
 void main() {
@@ -74,6 +75,8 @@ class _MyAppState extends State<MyApp> {
       '/example/error-localisation': (context) => ErrorLocalisationExample(
           engine: widget._engine, currencies: widget._currencies, style: style),
       '/example/paylike-style': (context) => PaylikeStyleExample(
+          engine: widget._engine, currencies: widget._currencies, style: style),
+      '/example/override': (context) => OverrideExample(
           engine: widget._engine, currencies: widget._currencies, style: style),
     };
     if (style == PaylikeWidgetStyles.cupertino) {

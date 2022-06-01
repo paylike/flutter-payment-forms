@@ -181,12 +181,16 @@ class PaylikeFormWidgetState<T extends PaylikeWhiteLabelWidget>
     });
   }
 
+  /// Returns the raw version of the engine widget
+  Widget get rawEngineWidget =>
+      PaylikeEngineWidget(engine: widget.engine, showEmptyState: true);
+
   /// Webview widget provided by [PaylikeEngineWidget]
   @nonVirtual
   Widget webview() {
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      PaylikeEngineWidget(engine: widget.engine, showEmptyState: true),
-    ]);
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [rawEngineWidget]);
   }
 
   /// Card number, expiry and CVC inputs

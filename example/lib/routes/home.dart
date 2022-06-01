@@ -133,6 +133,16 @@ class HomeScreen extends StatelessWidget {
             AvailabilityPlatforms.android
           ],
           onPressed: _navigateTo(context, '/example/paylike-style'),
+        ),
+        HomeItem(
+          title: 'Override white label widget example',
+          description:
+              'Showcases how you can completely customise the payment form and extend with your own custom logic based on the original implementation.',
+          platforms: const [
+            AvailabilityPlatforms.ios,
+            AvailabilityPlatforms.android
+          ],
+          onPressed: _navigateTo(context, '/example/override'),
         )
       ],
     )));
