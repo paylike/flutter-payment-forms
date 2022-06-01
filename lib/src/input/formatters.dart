@@ -58,21 +58,34 @@ class CardNumberFormatter extends TextInputFormatter {
       TextEditingValue oldValue, TextEditingValue newValue) {
     if (oldValue.text.isEmpty) return newValue;
     var oldWithoutFormat = _getNumberWithoutWhiteSpaces(oldValue.text);
-    if (oldWithoutFormat.length == newValue.text.length &&
-        oldValue.text[oldValue.text.length - 1] == " ") {
-      var reformatted = _getWhiteSpacesInserted(
-          newValue.text.substring(0, newValue.text.length - 1));
-      return TextEditingValue(
-          selection: TextSelection.collapsed(
-              offset: (newValue.selection.end - 1) +
-                  reformatted.numberOfWhiteSpaces),
-          text: reformatted.value);
+    var isTryingToDeleteSpace =
+        oldWithoutFormat.length == newValue.text.length &&
+            newValue.selection.end % 4 == 0;
+    if (isTryingToDeleteSpace) {
+      var whichSpace = newValue.selection.end ~/ 4;
+      if (whichSpace == 4) {
+        var reformatted = _getWhiteSpacesInserted(
+            newValue.text.substring(0, newValue.text.length - 1));
+        return TextEditingValue(
+            selection: TextSelection.collapsed(
+                offset: (newValue.selection.end - 1) +
+                    reformatted.numberOfWhiteSpaces),
+            text: reformatted.value);
+      } else if (whichSpace > 0) {
+        var reformatted = _getWhiteSpacesInserted(
+            newValue.text.replaceRange(whichSpace * 4 - 1, whichSpace * 4, ""));
+        return TextEditingValue(
+            selection: TextSelection.collapsed(
+                offset: newValue.selection.end + (whichSpace - 2)),
+            text: reformatted.value);
+      }
     }
-    if (newValue.text.length > 3) {
-      var reformatted = _getWhiteSpacesInserted(newValue.text);
+    var reformatted = _getWhiteSpacesInserted(newValue.text);
+    if (oldWithoutFormat.length > newValue.text.length ||
+        newValue.text.length > 3) {
       return TextEditingValue(
           selection: TextSelection.collapsed(
-              offset: newValue.selection.end + reformatted.numberOfWhiteSpaces),
+              offset: newValue.selection.end + (newValue.selection.end ~/ 4)),
           text: reformatted.value);
     }
     return newValue;
