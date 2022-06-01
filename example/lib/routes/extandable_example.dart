@@ -1,9 +1,9 @@
-import 'package:example/routes/complex/name_input.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:paylike_sdk/paylike_sdk.dart';
 
-import 'complex/note_input.dart';
+import 'extendable/note_input.dart';
+import 'extendable/name_input.dart';
 
 /// Shows off the minimal functionality of the white label component
 class ExtendableWhiteLabelExample extends StatelessWidget {
