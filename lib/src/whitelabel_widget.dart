@@ -28,22 +28,34 @@ import 'styling/styles.dart';
 /// a simple card, expiry and cvc code field, optionally a pay button as well
 class PaylikeWhiteLabelWidget extends StatefulWidget {
   /// Required for completing a payment flow
+  ///
+  /// The engine is a ChangeNotifier and can emit events. Whenever an event is emitted,
+  /// it changes state which you can access by [engine.current]. More information: [PaylikeEngine]
   final PaylikeEngine engine;
 
   /// Contains the options for the payment to execute
+  ///
+  /// This is required because we do not know
+  /// if the user is going to pay by Apple Pay or card
   final BasePayment options;
 
   /// Can be used to simulate scenarios in our sandbox environment,
   /// [more info here.](https://github.com/paylike/api-reference/blob/main/payments/index.md#test)
+  ///
+  /// Optional, empty by default
   final Map<String, dynamic>? testConfig;
 
   /// Describes the style which we use to render the default input components
+  ///
+  /// Optional, material by default
   final PaylikeWidgetStyles style;
 
   /// Describes the name of the payment config
   ///
   /// You need to have a payment config json in your assets
-  /// which describes to Apple Pay your payment. More information TODO
+  /// which describes to Apple Pay your payment.
+  ///
+  /// Optional, 'payment_config.json' by default
   final String paymentConfigName;
 
   const PaylikeWhiteLabelWidget(
@@ -63,9 +75,11 @@ class PaylikeWhiteLabelWidget extends StatefulWidget {
 /// Take a look at [PaylikeExtendableWhiteLabelWidget] to see how to use this state as an ancestor
 class PaylikeFormWidgetState<T extends PaylikeWhiteLabelWidget>
     extends State<T> {
+  /// Stores error messages and exceptions
   final SingleRepository<PaylikeFormsError> errorMessageRepository =
       SingleRepository(validator: (e) => true);
 
+  /// Used for tracking the state of the form
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   /// Card number
@@ -86,6 +100,7 @@ class PaylikeFormWidgetState<T extends PaylikeWhiteLabelWidget>
       SingleRepository(validator: CVCValidator.isValid);
   final InputDisplayService cvcService = InputDisplayService();
 
+  /// Tracks if the payment is in progress or not
   bool isLoading = false;
 
   /// Listens to engine events and updates the widget if anything happens
@@ -106,6 +121,10 @@ class PaylikeFormWidgetState<T extends PaylikeWhiteLabelWidget>
     });
   }
 
+  /// Used for centralized error collection
+  ///
+  /// Receives a function in the parameter that can be async, after running it
+  /// if an exception happened, it updates the [errorMessageRepository]
   Future<void> errorHandler(Function() fn) async {
     try {
       await fn();
@@ -134,6 +153,9 @@ class PaylikeFormWidgetState<T extends PaylikeWhiteLabelWidget>
   }
 
   /// Validates input fields
+  ///
+  /// Essentially runs the validators of the available repositories. It is used
+  /// directly before executing a payment initiation request
   bool inputsValid() {
     cvcService.change(
         cvcRepository.isValid() ? InputStates.valid : InputStates.invalid);
@@ -149,6 +171,7 @@ class PaylikeFormWidgetState<T extends PaylikeWhiteLabelWidget>
   /// Executes a card payment based on the input information
   void executeCardPayment() async {
     if (isLoading) return;
+    FocusManager.instance.primaryFocus?.unfocus();
     setState(() => isLoading = true);
     await errorHandler(() async {
       if (!inputsValid()) {
@@ -169,8 +192,11 @@ class PaylikeFormWidgetState<T extends PaylikeWhiteLabelWidget>
   }
 
   /// Executes an Apple Pay payment
+  ///
+  /// Requires the result to be from Apple API
   void executeApplePayPayment(Map<String, dynamic> result) async {
     if (isLoading) return;
+    FocusManager.instance.primaryFocus?.unfocus();
     setState(() => isLoading = true);
     await errorHandler(() async {
       var token = result['token'];
@@ -181,7 +207,7 @@ class PaylikeFormWidgetState<T extends PaylikeWhiteLabelWidget>
     });
   }
 
-  /// Returns the raw version of the engine widget
+  /// Returns the raw version of the engine widget capable of showing the webview
   Widget get rawEngineWidget =>
       PaylikeEngineWidget(engine: widget.engine, showEmptyState: true);
 
