@@ -11,12 +11,9 @@ class OverrideExample extends StatelessWidget {
   /// Describes the style of the example
   final PaylikeWidgetStyles style;
 
-  /// Currencies supported by Paylike
-  final PaylikeCurrencies currencies;
   const OverrideExample(
       {Key? key,
       required this.engine,
-      required this.currencies,
       this.style = PaylikeWidgetStyles.material})
       : super(key: key);
   @override
@@ -31,9 +28,7 @@ class OverrideExample extends StatelessWidget {
             child: CustomPayWidget(
               style: style,
               engine: engine,
-              options: BasePayment(
-                  amount: Money.fromDouble(
-                      currencies.byCode(CurrencyCode.EUR), 11.5)),
+              options: BasePayment(amount: Money.fromDouble('EUR', 11.5)),
             ))
       ],
       mainAxisAlignment: MainAxisAlignment.center,

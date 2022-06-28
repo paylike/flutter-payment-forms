@@ -13,7 +13,7 @@ dependencies:
   flutter_spinkit: ^5.1.0
   flutter_svg: ^1.0.3
   pay: ^1.0.8
-  paylike_flutter_engine: ^0.1.1
+  paylike_flutter_engine: ^0.1.2
   paylike_luhn: ^2.0.0
 
 dev_dependencies:

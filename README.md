@@ -12,7 +12,7 @@ This is the high level SDK we provide for using the Paylike ecosystem with views
 
 ## Library navigator
 
-This library was created to provide the simpliest way of integrating Paylike into your application. It provides a simple way to create a payment form and a simple way to handle the payment result.
+This library was created to provide the simpliest way of integrating Paylike into your application. It provides widgets to create a payment form and an easy way to handle the payment result.
 
 If you are looking for our low level library supporting executing payments through our API, you are looking for our [Engine](https://github.com/paylike/flutter-engine) which is responsible for making the API integration including the webview required to execute TDS challenges
 
@@ -28,7 +28,7 @@ import 'package:paylike_sdk/paylike_sdk.dart';
 class YourPaymentScreen extends StatelessWidget {
   YourPaymentScreen({Key? key}) : super(key: key);
   final PaylikeEngine _engine = PaylikeEngine(clientId: 'YOUR_CLIENT_ID');
-  final PaylikeCurrency _eur = PaylikeCurrencies().byCode(CurrencyCode.EUR);
+  final String _eur = 'EUR';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -187,6 +187,8 @@ The following functions are available over the state:
   void executeApplePayPayment(Map<String, dynamic> result)
 
   /// Returns the raw version of the engine widget capable of showing the webview
+  /// If you would like to change the constraints applied to this widget you
+  /// need to use this getter as [webview] is wrapped in a Row widget already
   Widget get rawEngineWidget
 
   /*

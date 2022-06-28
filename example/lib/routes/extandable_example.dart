@@ -10,15 +10,11 @@ class ExtendableWhiteLabelExample extends StatelessWidget {
   /// Engine for the example
   final PaylikeEngine engine;
 
-  /// Currencies supported by Paylike
-  final PaylikeCurrencies currencies;
-
   /// Describes the style of the example
   final PaylikeWidgetStyles style;
   const ExtendableWhiteLabelExample(
       {Key? key,
       required this.engine,
-      required this.currencies,
       this.style = PaylikeWidgetStyles.material})
       : super(key: key);
 
@@ -33,9 +29,7 @@ class ExtendableWhiteLabelExample extends StatelessWidget {
             child: PaylikeExtendableWhiteLabelWidget(
               style: style,
               engine: engine,
-              options: BasePayment(
-                  amount: Money.fromDouble(
-                      currencies.byCode(CurrencyCode.EUR), 11.5)),
+              options: BasePayment(amount: Money.fromDouble('EUR', 11.5)),
               extensions: [
                 CustomNameInput.init(style: style),
                 CustomNoteInput.init(style: style),

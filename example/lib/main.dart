@@ -21,7 +21,6 @@ const clientId = 'e393f9ec-b2f7-4f81-b455-ce45b02d355d';
 
 /// Showcases that the SDK works with Material design
 class MyApp extends StatefulWidget {
-  final PaylikeCurrencies _currencies = PaylikeCurrencies();
   final PaylikeEngine _engine = PaylikeEngine(clientId: clientId);
   MyApp({Key? key}) : super(key: key) {
     /// Change this to use a different language
@@ -68,16 +67,16 @@ class _MyAppState extends State<MyApp> {
     var routes = {
       '/': (context) => HomeScreen(
           engine: widget._engine, changeTheme: _changeTheme, style: style),
-      '/example/minimal': (context) => MinimalWhitelabelExample(
-          engine: widget._engine, currencies: widget._currencies, style: style),
-      '/example/extendable': (context) => ExtendableWhiteLabelExample(
-          engine: widget._engine, currencies: widget._currencies, style: style),
-      '/example/error-localisation': (context) => ErrorLocalisationExample(
-          engine: widget._engine, currencies: widget._currencies, style: style),
-      '/example/paylike-style': (context) => PaylikeStyleExample(
-          engine: widget._engine, currencies: widget._currencies, style: style),
-      '/example/override': (context) => OverrideExample(
-          engine: widget._engine, currencies: widget._currencies, style: style),
+      '/example/minimal': (context) =>
+          MinimalWhitelabelExample(engine: widget._engine, style: style),
+      '/example/extendable': (context) =>
+          ExtendableWhiteLabelExample(engine: widget._engine, style: style),
+      '/example/error-localisation': (context) =>
+          ErrorLocalisationExample(engine: widget._engine, style: style),
+      '/example/paylike-style': (context) =>
+          PaylikeStyleExample(engine: widget._engine, style: style),
+      '/example/override': (context) =>
+          OverrideExample(engine: widget._engine, style: style),
     };
     if (style == PaylikeWidgetStyles.cupertino) {
       return OverlaySupport.global(

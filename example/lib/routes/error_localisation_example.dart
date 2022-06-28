@@ -14,12 +14,9 @@ class ErrorLocalisationExample extends StatefulWidget {
   /// Describes the style of the example
   final PaylikeWidgetStyles style;
 
-  /// Currencies supported by Paylike
-  final PaylikeCurrencies currencies;
   const ErrorLocalisationExample(
       {Key? key,
       required this.engine,
-      required this.currencies,
       this.style = PaylikeWidgetStyles.material})
       : super(key: key);
 
@@ -41,9 +38,7 @@ class _ErrorLocalisationExampleState extends State<ErrorLocalisationExample> {
             child: PaylikeExtendableWhiteLabelWidget(
               style: widget.style,
               engine: widget.engine,
-              options: BasePayment(
-                  amount: Money.fromDouble(
-                      widget.currencies.byCode(CurrencyCode.EUR), 11.5)),
+              options: BasePayment(amount: Money.fromDouble('EUR', 11.5)),
               testConfig: current.testConfig,
               extensions: [
                 LanguageInput.init(
